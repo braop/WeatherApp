@@ -34,6 +34,7 @@
                         android:id="@+id/plan_image"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:contentDescription="@string/main_header_image"
                         android:scaleType="fitXY"
                         android:src="@drawable/sea_rainy" />
 
@@ -46,11 +47,13 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
+                        <!-- use a frame layout for temperature degrees -->
+
                         <TextView
-                            android:id="@+id/temparature"
+                            android:id="@+id/temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemparature}"
+                            android:text="@{viewModel.currentTemperature}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_llll"
                             tools:text="25" />
@@ -72,6 +75,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:padding="@dimen/margin_s">
 
@@ -85,7 +89,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemparature}"
+                            android:text="@{viewModel.currentTemperature}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m"
                             android:textStyle="bold"
@@ -111,7 +115,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemparature}"
+                            android:text="@{viewModel.currentTemperature}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m"
                             android:textStyle="bold"
@@ -136,7 +140,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemparature}"
+                            android:text="@{viewModel.currentTemperature}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m"
                             android:textStyle="bold"

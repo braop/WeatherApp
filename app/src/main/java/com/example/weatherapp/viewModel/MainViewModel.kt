@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
 
-    val currentTemparature = ObservableField<String>()
-    val minimumTemparature = ObservableField<Int>()
+    val currentTemperature = ObservableField<String>()
+    val minimumTemperature = ObservableField<Int>()
     val maximumTemperature = ObservableField<Int>()
 
     fun initiate() {
-        currentTemparature.set("26")
+        currentTemperature.set("26")
     }
 
 }
