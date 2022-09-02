@@ -7,6 +7,7 @@
     <dimen name="text_l">18sp</dimen>
     <dimen name="text_ll">22sp</dimen>
     <dimen name="text_lll">32sp</dimen>
+    <dimen name="text_llll">64sp</dimen>
 
     <dimen name="margin_sss">1dp</dimen>
     <dimen name="margin_ss">2dp</dimen>
@@ -17,6 +18,5 @@
     <dimen name="margin_l">16dp</dimen>
     <dimen name="margin_ll">32dp</dimen>
     <dimen name="margin_lll">48dp</dimen>
-    <dimen name="margin_llll">96dp</dimen>
 
 </resources>
