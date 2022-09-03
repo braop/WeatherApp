@@ -55,6 +55,7 @@
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.currentTemperature}"
                             android:textColor="@color/white"
+                            android:textStyle="bold"
                             android:textSize="@dimen/text_llll"
                             tools:text="25" />
 
@@ -77,13 +78,14 @@
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
                     android:orientation="horizontal"
+                    android:layout_marginHorizontal="@dimen/margin_l"
                     android:padding="@dimen/margin_s">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
+
                         android:orientation="vertical">
 
                         <TextView
@@ -134,7 +136,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:gravity="end"
                         android:orientation="vertical">
 
                         <TextView
@@ -163,6 +165,46 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/margin_l">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tuesday"
+                        android:textColor="@color/white"
+                        tools:text="Tuesday" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icn_clear"
+                            tools:text="Tuesday" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="29"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/white"
+                        tools:text="25" />
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/forecast_recyclerview"
