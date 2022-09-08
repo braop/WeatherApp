@@ -1,10 +1,12 @@
 package com.example.weatherapp.clients
 
-import com.example.weatherapp.api.response.ApiForecast
-import io.reactivex.rxjava3.core.Single
-import retrofit2.Call
+import com.example.weatherapp.api.ApiService
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ForecastClient() {
+@Singleton
+class ForecastClient @Inject constructor(private val service: ApiService.IApiService) {
 
+    fun getForecast() = service.getForecast()
 
 }

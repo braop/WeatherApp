@@ -10,28 +10,32 @@ data class ApiList(
     var clouds: ApiClouds?,
     var wind: ApiWind?,
     var visibility: Int?,
-    var pop: Int?,
+    var pop: Double?,
     var sys: ApiSys?,
     var dtTxt: String?
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        TODO("main"),
-        TODO("weather"),
+        parcel.readParcelable(ApiMain::class.java.classLoader),
+        parcel.createTypedArrayList(ApiWeather),
         parcel.readParcelable(ApiClouds::class.java.classLoader),
-        TODO("wind"),
+        parcel.readParcelable(ApiWind::class.java.classLoader),
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readValue(Int::class.java.classLoader) as? Int,
-        TODO("sys"),
+        parcel.readValue(Double::class.java.classLoader) as? Double,
+        parcel.readParcelable(ApiSys::class.java.classLoader),
         parcel.readString()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(dt)
+        parcel.writeParcelable(main, flags)
+        parcel.writeTypedList(weather)
         parcel.writeParcelable(clouds, flags)
+        parcel.writeParcelable(wind, flags)
         parcel.writeValue(visibility)
         parcel.writeValue(pop)
+        parcel.writeParcelable(sys, flags)
         parcel.writeString(dtTxt)
     }
 
