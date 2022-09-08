@@ -3,6 +3,7 @@ package com.example.weatherapp.viewModel
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import com.example.weatherapp.activity.MainInterface
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
 import com.example.weatherapp.api.response.ApiList
@@ -20,10 +21,12 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
     val minimumTemperature = ObservableField<Int>()
     val maximumTemperature = ObservableField<Int>()
     val forecasts = ObservableField<List<ApiList>>()
+    var navigator: MainInterface? = null
 
-    fun initiate() {
-        getForecast()
-        getCurrentWeatherBasedOnLocation()
+    fun initiate(navigator: MainInterface) {
+        this.navigator = navigator
+        //getForecast()
+        getCurrentWeatherByLocation()
     }
 
     private fun getForecast() {
@@ -32,26 +35,29 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
                 response.body()?.let {
                     Log.d("Success", "onResponse: $it")
                 }
+               // navigator?.onSuccess()
             }
 
             override fun onFailure(call: Call<ApiForecast>, t: Throwable) {
-                Log.d("Error", "onFailure:${t.message} ")
+                navigator?.onError()
             }
 
         })
     }
 
-    private fun getCurrentWeatherBasedOnLocation() {
+    private fun getCurrentWeatherByLocation() {
         forecastClient.getCurrentWeather().enqueue(object : Callback<ApiCurrent> {
             override fun onResponse(call: Call<ApiCurrent>, response: Response<ApiCurrent>) {
                 response.body()?.let {
                     currentWeather.set(it)
-                    Log.d("Success", "onResponse: $it")
+                    navigator?.onSuccess(it.weather?.get(0)?.main)
                 }
+
+
             }
 
             override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
-                Log.d("Error", "onFailure:${t.message} ")
+                navigator?.onError()
             }
 
         })

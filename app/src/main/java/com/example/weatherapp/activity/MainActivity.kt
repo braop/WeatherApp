@@ -1,6 +1,7 @@
 package com.example.weatherapp.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.weatherapp.CustomApplication
@@ -9,7 +10,7 @@ import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.viewModel.MainViewModel
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainInterface {
 
     @Inject
     lateinit var viewModel: MainViewModel
@@ -25,8 +26,36 @@ class MainActivity : AppCompatActivity() {
 
         binding.viewModel = viewModel
 
-        viewModel.initiate()
+        viewModel.initiate(this)
 
     }
 
+    override fun onSuccess(status: String?) {
+
+        when (status) {
+            "Clouds" -> {
+                binding.headerImage.setImageResource(R.drawable.forest_cloudy)
+                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
+
+            }
+            "Rain" -> {
+                binding.headerImage.setImageResource(R.drawable.forest_rainy)
+                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
+            }
+            "Sun" -> {
+                binding.headerImage.setImageResource(R.drawable.forest_sunny)
+                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
+            }
+        }
+    }
+
+    override fun onError() {
+        Toast.makeText(this, "Error, Please try again", Toast.LENGTH_SHORT).show()
+    }
+
+}
+
+interface MainInterface {
+    fun onSuccess(status: String?)
+    fun onError()
 }
