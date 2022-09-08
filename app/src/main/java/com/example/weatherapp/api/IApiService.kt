@@ -3,6 +3,7 @@ package com.example.weatherapp.api
 import android.content.Context
 import com.example.weatherapp.CustomInterceptor
 import com.example.weatherapp.R
+import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
@@ -49,7 +50,7 @@ class ApiService(private val context: Context) {
         fun getForecast(): Call<ApiForecast>
 
         @GET("weather?lat=0.35123179760823653&lon=32.58288521779097&appid=63f6a732652e0076ef7243052596bcb6")
-        fun getCurrent(): ApiForecast
+        fun getCurrentWeather(): Call<ApiCurrent>
     }
 
 }

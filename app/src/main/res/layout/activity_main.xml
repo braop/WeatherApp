@@ -53,7 +53,7 @@
                             android:id="@+id/temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemperature}"
+                            android:text="@{viewModel.currentWeather.main.temp.toString()}"
                             android:textColor="@color/white"
                             android:textStyle="bold"
                             android:textSize="@dimen/text_llll"
@@ -91,7 +91,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemperature}"
+                            android:text="@{viewModel.currentWeather.main.tempMin.toString()}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m"
                             android:textStyle="bold"
@@ -117,7 +117,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemperature}"
+                            android:text="@{viewModel.currentWeather.main.temp.toString()}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m"
                             android:textStyle="bold"
@@ -142,7 +142,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.currentTemperature}"
+                            android:text="@{viewModel.currentWeather.main.tempMax.toString()}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m"
                             android:textStyle="bold"

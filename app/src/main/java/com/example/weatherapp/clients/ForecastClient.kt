@@ -6,7 +6,6 @@ import javax.inject.Singleton
 
 @Singleton
 class ForecastClient @Inject constructor(private val service: ApiService.IApiService) {
-
     fun getForecast() = service.getForecast()
-
+    fun getCurrentWeather() = service.getCurrentWeather()
 }
