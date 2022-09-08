@@ -1,6 +1,5 @@
 package com.example.weatherapp.viewModel
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.activity.MainInterface
@@ -25,7 +24,7 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
 
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
-        //getForecast()
+        getForecast()
         getCurrentWeatherByLocation()
     }
 
@@ -33,9 +32,9 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
         forecastClient.getForecast().enqueue(object : Callback<ApiForecast> {
             override fun onResponse(call: Call<ApiForecast>, response: Response<ApiForecast>) {
                 response.body()?.let {
-                    Log.d("Success", "onResponse: $it")
+                    forecasts.set(it.list)
                 }
-               // navigator?.onSuccess()
+                // navigator?.onSuccess()
             }
 
             override fun onFailure(call: Call<ApiForecast>, t: Throwable) {

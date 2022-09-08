@@ -45,7 +45,7 @@ class ApiService(private val context: Context) {
         }
 
     interface IApiService {
-        @GET("forecast?id=524901&appid=63f6a732652e0076ef7243052596bcb6&units=metric")
+        @GET("forecast?lat=0.35123179760823653&lon=32.58288521779097&appid=63f6a732652e0076ef7243052596bcb6&units=metric")
         fun getForecast(): Call<ApiForecast>
 
         @GET("weather?lat=0.35123179760823653&lon=32.58288521779097&appid=63f6a732652e0076ef7243052596bcb6&units=metric")

@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
+import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.viewModel.MainViewModel
 import javax.inject.Inject
@@ -27,6 +29,12 @@ class MainActivity : AppCompatActivity(), MainInterface {
         binding.viewModel = viewModel
 
         viewModel.initiate(this)
+
+        binding.forecastRecyclerview.apply {
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            adapter = ForecastRecyclerviewAdapter()
+        }
 
     }
 
