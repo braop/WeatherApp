@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.databinding.ItemWeatherBinding
 
-class ForecastRecyclerviewAdapter : RecyclerView.Adapter<ForecastRecyclerviewAdapter.BindingHolder>() {
+class ForecastRecyclerviewAdapter :
+    RecyclerView.Adapter<ForecastRecyclerviewAdapter.BindingHolder>() {
 
     var forecasts: List<ApiList>? = null
 
@@ -23,9 +24,9 @@ class ForecastRecyclerviewAdapter : RecyclerView.Adapter<ForecastRecyclerviewAda
         // change icons here
     }
 
-    override fun getItemCount(): Int {
-        return 5
-    }
+    override fun getItemCount() = 5
+    //return forecasts?.size ?: 0
+    //}
 
     class BindingHolder(var binding: ItemWeatherBinding) : RecyclerView.ViewHolder(binding.root)
 }
