@@ -55,14 +55,14 @@
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.currentWeather.main.temp.toString()}"
                             android:textColor="@color/white"
-                            android:textStyle="bold"
                             android:textSize="@dimen/text_llll"
+                            android:textStyle="bold"
                             tools:text="25" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/rainy"
+                            android:text="@{viewModel.currentWeather.weather.get(0).main}"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_lll"
@@ -76,9 +76,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_l"
                     android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:layout_marginHorizontal="@dimen/margin_l"
                     android:padding="@dimen/margin_s">
 
                     <LinearLayout
@@ -169,8 +169,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:padding="@dimen/margin_l">
 
                     <TextView
