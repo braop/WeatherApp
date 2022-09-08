@@ -14,7 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import java.util.concurrent.TimeUnit
 
-
 class ApiService(private val context: Context) {
 
     val service: IApiService = create(IApiService::class.java)
