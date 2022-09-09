@@ -24,9 +24,7 @@ class ForecastRecyclerviewAdapter :
         // change icons here
     }
 
-    override fun getItemCount() = 5
-    //return forecasts?.size ?: 0
-    //}
+    override fun getItemCount() = forecasts?.size ?: 0
 
     class BindingHolder(var binding: ItemWeatherBinding) : RecyclerView.ViewHolder(binding.root)
 }
