@@ -52,22 +52,38 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <!-- use a frame layout for temperature degrees -->
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/temperature"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginEnd="@dimen/margin_s"
+                                    android:text="@{viewModel.currentTemp}"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_llll"
+                                    android:textStyle="bold"
+                                    tools:text="25" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_s"
+                                    android:layout_toEndOf="@+id/temperature"
+                                    android:text="@string/o_"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_ll"
+                                    android:textStyle="bold" />
+
+                            </RelativeLayout>
 
                             <TextView
-                                android:id="@+id/temperature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.currentTemperature}"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text_llll"
-                                android:textStyle="bold"
-                                tools:text="25" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewModel.currentWeather.weather.get(0).main}"
+                                android:text="@{viewModel.currentStatus}"
                                 android:textAllCaps="true"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_lll"
@@ -96,7 +112,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.currentWeather.main.tempMin.toString()}"
+                                android:text="@{viewModel.minTemp}"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
@@ -122,7 +138,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.currentWeather.main.temp.toString()}"
+                                android:text="@{viewModel.currentTemp}"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
@@ -147,7 +163,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.currentWeather.main.tempMax.toString()}"
+                                android:text="@{viewModel.maxTemp}"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
@@ -182,6 +198,12 @@
             </androidx.core.widget.NestedScrollView>
 
         </RelativeLayout>
+
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}" />
 
 
     </RelativeLayout>

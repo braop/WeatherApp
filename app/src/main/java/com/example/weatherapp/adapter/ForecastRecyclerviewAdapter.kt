@@ -21,6 +21,8 @@ class ForecastRecyclerviewAdapter :
         val forecast = forecasts?.get(position)
         holder.binding.apiList = forecast
 
+        holder.binding.temperature.text = forecast?.main?.temp?.toInt().toString()
+
         // change icons here
     }
 
