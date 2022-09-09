@@ -17,6 +17,7 @@ import javax.inject.Singleton
 class MainViewModel @Inject constructor(private val forecastClient: ForecastClient) : ViewModel() {
 
     val currentWeather = ObservableField<ApiCurrent>()
+    val currentTemperature = ObservableField<String>()
     val minimumTemperature = ObservableField<Int>()
     val maximumTemperature = ObservableField<Int>()
     val forecasts = ObservableField<List<ApiList>>()
@@ -49,6 +50,7 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
             override fun onResponse(call: Call<ApiCurrent>, response: Response<ApiCurrent>) {
                 response.body()?.let {
                     currentWeather.set(it)
+                    currentTemperature.set("${it.main?.temp?.toInt()}")
                     navigator?.onSuccess(it.weather?.get(0)?.main)
                 }
 
