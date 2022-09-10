@@ -1,12 +1,12 @@
 package com.example.weatherapp.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.databinding.ItemWeatherBinding
-import java.time.LocalDate
 
 
 class ForecastRecyclerviewAdapter :
@@ -20,15 +20,12 @@ class ForecastRecyclerviewAdapter :
         return BindingHolder(binding)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: BindingHolder, position: Int) {
         val forecast = forecasts?.get(position)
         holder.binding.apiList = forecast
 
-
-        val localDate = LocalDate.of(2020, 12, 22)
-        val dayOfWeek = localDate.dayOfWeek
-        holder.binding.temperature.text = dayOfWeek.name
-        //forecast?.main?.temp?.toInt().toString()
+        holder.binding.temperature.text = forecast?.main?.temp?.toInt().toString()
 
         when (forecast?.weather?.get(0)?.main) {
             "Clouds" -> {
