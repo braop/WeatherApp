@@ -34,27 +34,29 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
                         <ImageView
                             android:id="@+id/header_image"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:contentDescription="@string/main_header_image"
-                            android:scaleType="fitXY" />
+                            android:scaleType="fitXY"
+                            android:src="@drawable/sea_rainy" />
 
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/margin_lll"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
                             android:gravity="center"
                             android:orientation="vertical">
 
                             <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:id="@+id/temp_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_s">
 
                                 <TextView
                                     android:id="@+id/temperature"
@@ -71,7 +73,6 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/margin_s"
                                     android:layout_toEndOf="@+id/temperature"
                                     android:text="@string/o_"
                                     android:textColor="@color/white"
@@ -98,6 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_l"
+                        android:layout_marginVertical="@dimen/margin_s"
                         android:baselineAligned="false"
                         android:orientation="horizontal"
                         android:padding="@dimen/margin_s">
@@ -106,7 +108,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-
                             android:orientation="vertical">
 
                             <TextView

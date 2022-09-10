@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_l"
+        android:layout_marginTop="@dimen/margin_m"
         android:orientation="horizontal"
         android:padding="@dimen/margin_s">
 
@@ -23,6 +24,7 @@
             android:layout_weight="1"
             android:text="@{apiList.dtTxt}"
             android:textColor="@color/white"
+            android:textSize="@dimen/text_m"
             tools:text="Tuesday" />
 
         <LinearLayout
@@ -35,7 +37,7 @@
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icn_clear" />
+                />
 
         </LinearLayout>
 
@@ -60,7 +62,7 @@
                 android:layout_toEndOf="@+id/temperature"
                 android:text="@string/o_"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_sss" />
+                android:textSize="@dimen/text_m" />
 
         </RelativeLayout>
 

@@ -3,8 +3,11 @@ package com.example.weatherapp.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapp.R
 import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.databinding.ItemWeatherBinding
+import java.time.LocalDate
+
 
 class ForecastRecyclerviewAdapter :
     RecyclerView.Adapter<ForecastRecyclerviewAdapter.BindingHolder>() {
@@ -21,7 +24,23 @@ class ForecastRecyclerviewAdapter :
         val forecast = forecasts?.get(position)
         holder.binding.apiList = forecast
 
-        holder.binding.temperature.text = forecast?.main?.temp?.toInt().toString()
+
+        val localDate = LocalDate.of(2020, 12, 22)
+        val dayOfWeek = localDate.dayOfWeek
+        holder.binding.temperature.text = dayOfWeek.name
+        //forecast?.main?.temp?.toInt().toString()
+
+        when (forecast?.weather?.get(0)?.main) {
+            "Clouds" -> {
+                holder.binding.icon.setImageResource(R.drawable.icn_clear)
+            }
+            "Rain" -> {
+                holder.binding.icon.setImageResource(R.drawable.icn_rain)
+            }
+            "Sun" -> {
+                holder.binding.icon.setImageResource(R.drawable.icn_partly_sunny)
+            }
+        }
 
         // change icons here
     }

@@ -80,7 +80,7 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
             "Clouds" -> {
                 currentStatus.set("Cloudy")
             }
-            "Rains" -> {
+            "Rain" -> {
                 currentStatus.set("Rainy")
             }
             "Sun" -> {
