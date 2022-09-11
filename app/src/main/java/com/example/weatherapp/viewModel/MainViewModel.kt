@@ -25,69 +25,85 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
     val maxTemp = ObservableField<String>()
     val forecasts = ObservableField<List<ApiList>>()
     val loading = ObservableBoolean(false)
+    val latitude = ObservableField<Double>()
+    val longitude = ObservableField<Double>()
     var navigator: MainInterface? = null
 
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
         getForecast(
-            22.3476,
-            0.58288521779097
+            0.3476,
+            32.58288521779097
         )
         getCurrentWeatherByLocation(
-            22.3476,
-            0.58288521779097
+            0.3476,
+            32.58288521779097
         )
     }
 
-    private fun getForecast(latitude: Double, longitude: Double) {
+    private fun getForecast(latitude: Double?, longitude: Double?) {
         loading.set(true)
-        forecastClient.getForecast(latitude, longitude)
-            .enqueue(object : Callback<ApiForecast> {
-                override fun onResponse(call: Call<ApiForecast>, response: Response<ApiForecast>) {
-                    response.body()?.let {
-                        forecasts.set(it.list)
-                        minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt().toString())
-                        maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt().toString())
-                    }
-                    loading.set(false)
-                    // navigator?.onSuccess()
-                }
+        latitude?.let { lat ->
+            longitude?.let { long ->
+                forecastClient.getForecast(lat, long)
+                    .enqueue(object : Callback<ApiForecast> {
+                        override fun onResponse(
+                            call: Call<ApiForecast>,
+                            response: Response<ApiForecast>
+                        ) {
+                            response.body()?.let {
+                                forecasts.set(it.list)
+                                minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt().toString())
+                                maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt().toString())
+                            }
+                            loading.set(false)
+                            // navigator?.onSuccess()
+                        }
 
-                override fun onFailure(call: Call<ApiForecast>, t: Throwable) {
-                    loading.set(false)
-                    navigator?.onError()
-                }
+                        override fun onFailure(call: Call<ApiForecast>, t: Throwable) {
+                            loading.set(false)
+                            navigator?.onError()
+                        }
 
-            })
+                    })
+            }
+        }
     }
 
     private fun getCurrentWeatherByLocation(
-        latitude: Double,
-        longitude: Double
+        latitude: Double?,
+        longitude: Double?
     ) {
         loading.set(true)
-        forecastClient.getWeather(latitude, longitude)
-            .enqueue(object : Callback<ApiCurrent> {
-                override fun onResponse(call: Call<ApiCurrent>, response: Response<ApiCurrent>) {
-                    response.body()?.let {
-                        currentWeather.set(it)
-                        minTemp.set(it.main?.tempMin?.toInt().toString())
-                        maxTemp.set(it.main?.tempMax?.toInt().toString())
-                        currentTemp.set(it.main?.temp?.toInt().toString())
-                        feelsLike.set(it.main?.feelsLike?.toInt().toString())
-                        generateStatus(it.weather?.get(0)?.main)
-                        navigator?.onSuccess(it.weather?.get(0)?.main)
+        latitude?.let { lat ->
+            longitude?.let { long ->
+                forecastClient.getWeather(lat, long)
+                    .enqueue(object : Callback<ApiCurrent> {
+                        override fun onResponse(
+                            call: Call<ApiCurrent>,
+                            response: Response<ApiCurrent>
+                        ) {
+                            response.body()?.let {
+                                currentWeather.set(it)
+                                minTemp.set(it.main?.tempMin?.toInt().toString())
+                                maxTemp.set(it.main?.tempMax?.toInt().toString())
+                                currentTemp.set(it.main?.temp?.toInt().toString())
+                                feelsLike.set(it.main?.feelsLike?.toInt().toString())
+                                generateStatus(it.weather?.get(0)?.main)
+                                navigator?.onSuccess(it.weather?.get(0)?.main)
 
-                    }
-                    loading.set(false)
-                }
+                            }
+                            loading.set(false)
+                        }
 
-                override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
-                    loading.set(false)
-                    navigator?.onError()
-                }
+                        override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
+                            loading.set(false)
+                            navigator?.onError()
+                        }
 
-            })
+                    })
+            }
+        }
     }
 
     fun destroy() {
