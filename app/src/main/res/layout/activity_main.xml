@@ -41,14 +41,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:contentDescription="@string/main_header_image"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/sea_rainy" />
+                            android:scaleType="fitXY" />
 
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/margin_ll"
                             android:gravity="center"
                             android:orientation="vertical">
 

@@ -1,9 +1,11 @@
 package com.example.weatherapp.activity
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Looper
+import android.provider.Settings
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +14,8 @@ import com.example.weatherapp.R
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.viewModel.MainViewModel
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainInterface {
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
         super.onCreate(savedInstanceState)
 
         (application as CustomApplication).getComponent().inject(this)
+
         binding.viewModel = viewModel
         viewModel.initiate(this)
 
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
                 binding.headerImage.setImageResource(R.drawable.forest_rainy)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
             }
-            "Sun" -> {
+            "Clear" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_sunny)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
             }
@@ -80,32 +84,22 @@ class MainActivity : AppCompatActivity(), MainInterface {
                     Toast.makeText(this, "Permission not granted", Toast.LENGTH_LONG).show()
                 }
             }
+            else -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Allow Location Permission")
+                    .setMessage("This is required")
+                    .setCancelable(false)
+                    .setPositiveButton("Enable now") { _, _ ->
+                        this.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                    }
+                    .show()
+            }
         }
     }
 
-
-    private fun setUpLocationListener() {
-        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(500)
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    super.onLocationResult(locationResult)
-
-                    Toast.makeText(
-                        this@MainActivity,
-                        "onLocationResult: ${locationResult.lastLocation?.latitude} ${locationResult.lastLocation?.longitude}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-
-                }
-            },
-            Looper.myLooper()
-        )
-
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.destroy()
     }
 
     companion object {
@@ -118,20 +112,3 @@ interface MainInterface {
     fun onSuccess(status: String?)
     fun onError()
 }
-
-/*when {
-                        PermissionLocation.isLocationEnabled(this) -> {
-                            setUpLocationListener()
-                        }
-                        else -> {
-                            //show dialog to enable location
-                            AlertDialog.Builder(this)
-                                .setTitle("Allow Location Permission")
-                                .setMessage("This is required")
-                                .setCancelable(false)
-                                .setPositiveButton("Enable now") { _, _ ->
-                                    this.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                                }
-                                .show()
-                        }
-                    }*/
