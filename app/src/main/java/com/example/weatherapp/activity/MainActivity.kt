@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity(), MainInterface {
         super.onCreate(savedInstanceState)
 
         (application as CustomApplication).getComponent().inject(this)
-
         binding.viewModel = viewModel
         viewModel.initiate(this)
 

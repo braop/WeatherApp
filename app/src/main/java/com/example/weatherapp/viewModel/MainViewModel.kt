@@ -30,12 +30,12 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
         getForecast(
-            0.3476,
-            32.58288521779097
+            22.3476,
+            0.58288521779097
         )
         getCurrentWeatherByLocation(
-            0.3476,
-            32.58288521779097
+            22.3476,
+            0.58288521779097
         )
     }
 
