@@ -12,6 +12,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 class ApiService(private val context: Context) {
@@ -20,7 +21,7 @@ class ApiService(private val context: Context) {
 
     lateinit var retrofit: Retrofit
 
-    fun <S> create(serviceClass: Class<S>): S {
+    private fun <S> create(serviceClass: Class<S>): S {
         val gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .serializeNulls()
@@ -45,11 +46,21 @@ class ApiService(private val context: Context) {
         }
 
     interface IApiService {
-        @GET("forecast?lat=0.35123179760823653&lon=32.58288521779097&appid=63f6a732652e0076ef7243052596bcb6&units=metric")
-        fun getForecast(): Call<ApiForecast>
+        @GET("forecast")
+        fun getForecast(
+            @Query("lat") latitude: Double,
+            @Query("lon") longitude: Double,
+            @Query("appid") appid: String,
+            @Query("units") metric: String
+        ): Call<ApiForecast>
 
-        @GET("weather?lat=0.35123179760823653&lon=32.58288521779097&appid=63f6a732652e0076ef7243052596bcb6&units=metric")
-        fun getCurrentWeather(): Call<ApiCurrent>
+        @GET("weather")
+        fun getWeather(
+            @Query("lat") lat: Double,
+            @Query("lon") lon: Double,
+            @Query("appid") appid: String,
+            @Query("units") metric: String
+        ): Call<ApiCurrent>
     }
 
 }

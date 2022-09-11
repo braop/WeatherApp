@@ -78,4 +78,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     compileOnly 'javax.annotation:jsr250-api:1.0'
 
+    //location
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+
 }
