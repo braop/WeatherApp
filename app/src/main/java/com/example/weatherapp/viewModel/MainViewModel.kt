@@ -25,23 +25,13 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
     val maxTemp = ObservableField<String>()
     val forecasts = ObservableField<List<ApiList>>()
     val loading = ObservableBoolean(false)
-    val latitude = ObservableField<Double>()
-    val longitude = ObservableField<Double>()
     var navigator: MainInterface? = null
 
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
-        getForecast(
-            0.3476,
-            32.58288521779097
-        )
-        getCurrentWeatherByLocation(
-            0.3476,
-            32.58288521779097
-        )
     }
 
-    private fun getForecast(latitude: Double?, longitude: Double?) {
+    fun getForecast(latitude: Double?, longitude: Double?) {
         loading.set(true)
         latitude?.let { lat ->
             longitude?.let { long ->
@@ -70,7 +60,7 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
         }
     }
 
-    private fun getCurrentWeatherByLocation(
+    fun getWeather(
         latitude: Double?,
         longitude: Double?
     ) {
