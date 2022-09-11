@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.api.response.ApiList
 
-object BindingAdapterForLists {
+object BindingAdapter {
 
     @SuppressLint("NotifyDataSetChanged")
     @BindingAdapter("forecasts")

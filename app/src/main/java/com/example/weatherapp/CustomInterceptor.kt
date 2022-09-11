@@ -8,7 +8,6 @@ class CustomInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
         val request = original.newBuilder()
-            .header("Accept", "application/json")
             .method(original.method(), original.body())
 
         return chain.proceed(

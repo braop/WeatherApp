@@ -2,9 +2,9 @@ package com.example.weatherapp.api
 
 import android.content.Context
 import com.example.weatherapp.CustomInterceptor
-import com.example.weatherapp.R
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
+import com.example.weatherapp.util.Constants
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -30,7 +30,7 @@ class ApiService(private val context: Context) {
         //create retrofit
         retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl(context.getString(R.string.base_url))
+            .baseUrl(Constants.BASE_URL)
             .client(httpBuilder.build())
             .build()
 

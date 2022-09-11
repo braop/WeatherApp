@@ -30,21 +30,17 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
         this.navigator = navigator
         getForecast(
             0.35123179760823653,
-            32.58288521779097,
-            "63f6a732652e0076ef7243052596bcb6",
-            "metric"
+            32.58288521779097
         )
         getCurrentWeatherByLocation(
             0.35123179760823653,
-            32.58288521779097,
-            "63f6a732652e0076ef7243052596bcb6",
-            "metric"
+            32.58288521779097
         )
     }
 
-    private fun getForecast(latitude: Double, longitude: Double, appId: String, units: String) {
+    private fun getForecast(latitude: Double, longitude: Double) {
         loading.set(true)
-        forecastClient.getForecast(latitude, longitude, appId, units)
+        forecastClient.getForecast(latitude, longitude)
             .enqueue(object : Callback<ApiForecast> {
                 override fun onResponse(call: Call<ApiForecast>, response: Response<ApiForecast>) {
                     response.body()?.let {
@@ -64,12 +60,10 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
 
     private fun getCurrentWeatherByLocation(
         latitude: Double,
-        longitude: Double,
-        appId: String,
-        units: String
+        longitude: Double
     ) {
         loading.set(true)
-        forecastClient.getWeather(latitude, longitude, appId, units)
+        forecastClient.getWeather(latitude, longitude)
             .enqueue(object : Callback<ApiCurrent> {
                 override fun onResponse(call: Call<ApiCurrent>, response: Response<ApiCurrent>) {
                     response.body()?.let {
