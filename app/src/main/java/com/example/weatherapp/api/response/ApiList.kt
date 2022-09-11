@@ -2,6 +2,7 @@ package com.example.weatherapp.api.response
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 
 data class ApiList(
     var dt: Int?,
@@ -12,6 +13,7 @@ data class ApiList(
     var visibility: Int?,
     var pop: Double?,
     var sys: ApiSys?,
+    @SerializedName("dt_txt")
     var dtTxt: String?
 ): Parcelable {
     constructor(parcel: Parcel) : this(
