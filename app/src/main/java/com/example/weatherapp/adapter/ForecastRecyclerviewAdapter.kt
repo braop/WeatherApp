@@ -24,16 +24,15 @@ class ForecastRecyclerviewAdapter :
 
         when (forecast?.status) {
             "Clouds" -> {
-                holder.binding.icon.setImageResource(R.drawable.icn_partly_sunny)
+                holder.binding.icon.setImageResource(R.drawable.cloud)
             }
             "Rain" -> {
-                holder.binding.icon.setImageResource(R.drawable.icn_rain)
+                holder.binding.icon.setImageResource(R.drawable.rain)
             }
             "Clear" -> {
-                holder.binding.icon.setImageResource(R.drawable.icn_clear)
+                holder.binding.icon.setImageResource(R.drawable.sun)
             }
         }
-
         // change icons here
     }
 
