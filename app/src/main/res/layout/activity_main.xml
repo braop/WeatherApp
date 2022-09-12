@@ -8,6 +8,8 @@
 
         <import type="android.view.View" />
 
+        <import type="java.text.NumberFormat" />
+
         <variable
             name="viewModel"
             type="com.example.weatherapp.viewModel.MainViewModel" />
@@ -57,18 +59,18 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/margin_s"
-                                android:text='@{viewModel.currentTemp+"\u00B0"}'
+                                android:fontFamily="@font/bariol_regular"
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.currentTemp)+"\u00B0"}'
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_llll"
-                                android:textStyle="bold"
                                 tools:text="25" />
 
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/bariol_bold"
+                                android:fontFamily="@font/bariol_regular"
                                 android:text="@{viewModel.currentStatus}"
                                 android:textAllCaps="true"
                                 android:textColor="@color/white"
@@ -99,7 +101,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/bariol_regular"
-                                android:text='@{viewModel.minTemp+"\u00B0"}'
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.minTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_l"
                                 android:textStyle="bold"
@@ -127,7 +129,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/bariol_regular"
-                                android:text="@{viewModel.currentTemp}"
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.currentTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_l"
                                 android:textStyle="bold"
@@ -136,9 +138,9 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:fontFamily="@font/bariol_regular"
                                 android:text="@string/current"
+                                android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_l"
                                 tools:text="Current" />
@@ -155,7 +157,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/bariol_regular"
-                                android:text='@{viewModel.maxTemp+"\u00B0"}'
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.maxTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_l"
                                 android:textStyle="bold"

@@ -1,5 +1,6 @@
 package com.example.weatherapp.viewModel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -7,13 +8,15 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherapp.activity.MainInterface
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
-import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
 import com.example.weatherapp.clients.WeatherClient
 import com.example.weatherapp.models.ForecastModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.DateFormatSymbols
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,11 +27,11 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val currentWeather = ObservableField<ApiCurrent>()
-    val currentTemp = ObservableField<String>()
+    val currentTemp = ObservableField<Int>()
     val currentStatus = ObservableField<String>()
     val feelsLike = ObservableField<String>()
-    val minTemp = ObservableField<String>()
-    val maxTemp = ObservableField<String>()
+    val minTemp = ObservableField<Int>()
+    val maxTemp = ObservableField<Int>()
     val forecasts = ObservableField<List<ForecastModel>>()
     val listOfForecasts = arrayListOf<ForecastModel>()
     val loading = ObservableBoolean(false)
@@ -49,8 +52,8 @@ class MainViewModel @Inject constructor(
                             response: Response<ApiForecast>
                         ) {
                             response.body()?.let {
-                                minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt().toString())
-                                maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt().toString())
+                                minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt())
+                                maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt())
 
                                 it.list?.forEach { apiList ->
 
@@ -59,6 +62,7 @@ class MainViewModel @Inject constructor(
                                         listOfForecasts.add(
                                             ForecastModel(
                                                 apiList.dtTxt?.trim()?.substring(0, 10),
+                                                getDayName(apiList.dtTxt?.trim()?.substring(0, 10)),
                                                 apiList.main?.temp?.toInt(),
                                                 apiList.weather?.get(0)?.main
                                             )
@@ -77,6 +81,9 @@ class MainViewModel @Inject constructor(
                                             listOfForecasts.add(
                                                 ForecastModel(
                                                     apiList.dtTxt?.trim()?.substring(0, 10),
+                                                    getDayName(
+                                                        apiList.dtTxt?.trim()?.substring(0, 10)
+                                                    ),
                                                     apiList.main?.temp?.toInt(),
                                                     apiList.weather?.get(0)?.main
                                                 )
@@ -103,6 +110,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
+    fun getDayName(dateText: String?): String {
+        val date = SimpleDateFormat("yyyy-MM-dd").parse(dateText)
+        val cal = Calendar.getInstance()
+        cal.set(date.year, date.month, date.day)
+        return DateFormatSymbols().weekdays[cal[Calendar.DAY_OF_WEEK]]
+    }
+
     fun getWeather(
         latitude: Double?,
         longitude: Double?
@@ -118,9 +133,9 @@ class MainViewModel @Inject constructor(
                         ) {
                             response.body()?.let {
                                 currentWeather.set(it)
-                                minTemp.set(it.main?.tempMin?.toInt().toString())
-                                maxTemp.set(it.main?.tempMax?.toInt().toString())
-                                currentTemp.set(it.main?.temp?.toInt().toString())
+                                minTemp.set(it.main?.tempMin?.toInt())
+                                maxTemp.set(it.main?.tempMax?.toInt())
+                                currentTemp.set(it.main?.temp?.toInt())
                                 feelsLike.set(it.main?.feelsLike?.toInt().toString())
                                 generateStatus(it.weather?.get(0)?.main)
                                 navigator?.onSuccess(it.weather?.get(0)?.main)

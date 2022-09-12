@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="java.text.NumberFormat" />
+
         <variable
             name="forecast"
             type="com.example.weatherapp.models.ForecastModel" />
@@ -25,6 +27,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/bariol_regular"
             android:maxLines="1"
+            android:text="@{forecast.dayName}"
             android:textColor="@color/white"
             android:textSize="@dimen/text_l"
             tools:text="Tuesday" />
@@ -50,21 +53,14 @@
 
             <TextView
                 android:id="@+id/temperature"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:text='@{NumberFormat.getNumberInstance().format(forecast.temp)+ "\u00B0"}'
+                android:textAlignment="textEnd"
                 android:textColor="@color/white"
                 tools:text="25" />
 
-            <TextView
-                android:id="@+id/degree"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/temperature"
-                android:fontFamily="@font/bariol_regular"
-                android:text="@string/o_"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_l" />
 
         </RelativeLayout>
 
