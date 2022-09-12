@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
+import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.viewModel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -43,6 +44,12 @@ class MainActivity : AppCompatActivity(), MainInterface {
             layoutManager =
                 LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
             adapter = ForecastRecyclerviewAdapter()
+        }
+
+        binding.summaryRecyclerview.apply {
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = SummaryRecyclerviewAdapter()
         }
 
     }

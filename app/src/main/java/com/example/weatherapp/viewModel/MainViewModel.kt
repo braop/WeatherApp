@@ -33,6 +33,7 @@ class MainViewModel @Inject constructor(
     val minTemp = ObservableField<Int>()
     val maxTemp = ObservableField<Int>()
     val forecasts = ObservableField<List<ForecastModel>>()
+    val summaryDetails = ObservableField<ApiForecast>()
     val listOfForecasts = arrayListOf<ForecastModel>()
     val loading = ObservableBoolean(false)
     var navigator: MainInterface? = null
@@ -52,6 +53,8 @@ class MainViewModel @Inject constructor(
                             response: Response<ApiForecast>
                         ) {
                             response.body()?.let {
+
+                                summaryDetails.set(it)
                                 minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt())
                                 maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt())
 

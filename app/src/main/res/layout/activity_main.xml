@@ -85,6 +85,65 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_l"
+                            android:layout_marginTop="@dimen/margin_l"
+                            android:layout_marginEnd="@dimen/margin_l"
+                            android:layout_marginBottom="@dimen/margin_s"
+                            android:fontFamily="@font/bariol_bold"
+                            android:text='@{"Weekly Weather Summary - " +viewModel.summaryDetails.city.name}'
+                            android:textAllCaps="true"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_m" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_ll"
+                                android:layout_marginEnd="@dimen/margin_s"
+                                android:layout_marginBottom="@dimen/margin_l"
+                                android:fontFamily="@font/bariol_bold"
+                                android:text="@string/area_population"
+                                android:textAllCaps="true"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_ss" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_l"
+                                android:layout_marginBottom="@dimen/margin_l"
+                                android:fontFamily="@font/bariol_regular"
+                                android:text="@{NumberFormat.getNumberInstance.format(viewModel.summaryDetails.city.population)}"
+                                android:textAllCaps="true"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_ss" />
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/summary_recyclerview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin_s"
+                            android:overScrollMode="never"
+                            app:summary="@{viewModel.forecasts}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_l"
                         android:layout_marginVertical="@dimen/margin_s"
                         android:baselineAligned="false"
@@ -188,7 +247,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
-                        app:forecasts="@{viewModel.forecasts}" />
+                        app:forecast="@{viewModel.forecasts}" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
