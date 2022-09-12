@@ -5,14 +5,14 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
-import com.example.weatherapp.api.response.ApiList
+import com.example.weatherapp.models.ForecastModel
 
 object BindingAdapter {
 
     @SuppressLint("NotifyDataSetChanged")
     @BindingAdapter("forecasts")
     @JvmStatic
-    fun RecyclerView.setProducts(apiList: ObservableField<List<ApiList>>) {
+    fun RecyclerView.setProducts(apiList: ObservableField<List<ForecastModel>>) {
 
         adapter?.apply {
             this as ForecastRecyclerviewAdapter

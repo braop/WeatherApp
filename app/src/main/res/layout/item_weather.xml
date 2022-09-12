@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="apiList"
-            type="com.example.weatherapp.api.response.ApiList" />
+            name="forecast"
+            type="com.example.weatherapp.models.ForecastModel" />
 
     </data>
 
@@ -19,13 +19,14 @@
         android:padding="@dimen/margin_s">
 
         <TextView
+            android:id="@+id/day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@{apiList.dtTxt}"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_m"
+            android:fontFamily="@font/bariol_regular"
             android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_l"
             tools:text="Tuesday" />
 
         <LinearLayout
@@ -37,8 +38,7 @@
             <ImageView
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -61,9 +61,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/temperature"
+                android:fontFamily="@font/bariol_regular"
                 android:text="@string/o_"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_m" />
+                android:textSize="@dimen/text_l" />
 
         </RelativeLayout>
 

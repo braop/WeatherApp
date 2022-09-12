@@ -1,5 +1,6 @@
 package com.example.weatherapp.viewModel
 
+import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.example.weatherapp.api.response.ApiForecast
 import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
 import com.example.weatherapp.clients.WeatherClient
+import com.example.weatherapp.models.ForecastModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +29,8 @@ class MainViewModel @Inject constructor(
     val feelsLike = ObservableField<String>()
     val minTemp = ObservableField<String>()
     val maxTemp = ObservableField<String>()
-    val forecasts = ObservableField<List<ApiList>>()
+    val forecasts = ObservableField<List<ForecastModel>>()
+    val listOfForecasts = arrayListOf<ForecastModel>()
     val loading = ObservableBoolean(false)
     var navigator: MainInterface? = null
 
@@ -46,10 +49,46 @@ class MainViewModel @Inject constructor(
                             response: Response<ApiForecast>
                         ) {
                             response.body()?.let {
-                                forecasts.set(it.list)
                                 minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt().toString())
                                 maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt().toString())
+
+                                it.list?.forEach { apiList ->
+
+                                    if (listOfForecasts.isEmpty()) {
+
+                                        listOfForecasts.add(
+                                            ForecastModel(
+                                                apiList.dtTxt?.trim()?.substring(0, 10),
+                                                apiList.main?.temp?.toInt(),
+                                                apiList.weather?.get(0)?.main
+                                            )
+                                        )
+                                    } else {
+                                        var boo = 0;
+                                        listOfForecasts.forEach {
+                                            if (it.dateText.equals(
+                                                    apiList.dtTxt?.trim()?.substring(0, 10)
+                                                )
+                                            ) {
+                                                boo = 1
+                                            }
+                                        }
+                                        if (boo == 0) {
+                                            listOfForecasts.add(
+                                                ForecastModel(
+                                                    apiList.dtTxt?.trim()?.substring(0, 10),
+                                                    apiList.main?.temp?.toInt(),
+                                                    apiList.weather?.get(0)?.main
+                                                )
+                                            )
+                                        }
+                                    }
+
+                                }
+
                             }
+                            Log.d("TAG", "onResponse: $listOfForecasts")
+                            forecasts.set(listOfForecasts)
                             loading.set(false)
                             // navigator?.onSuccess()
                         }
