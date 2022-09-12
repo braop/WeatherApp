@@ -8,6 +8,7 @@ import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
 import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
+import com.example.weatherapp.clients.WeatherClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +16,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MainViewModel @Inject constructor(private val forecastClient: ForecastClient) : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val forecastClient: ForecastClient,
+    private val weatherClient: WeatherClient
+) : ViewModel() {
 
     val currentWeather = ObservableField<ApiCurrent>()
     val currentTemp = ObservableField<String>()
@@ -67,7 +71,7 @@ class MainViewModel @Inject constructor(private val forecastClient: ForecastClie
         loading.set(true)
         latitude?.let { lat ->
             longitude?.let { long ->
-                forecastClient.getWeather(lat, long)
+                weatherClient.getWeather(lat, long)
                     .enqueue(object : Callback<ApiCurrent> {
                         override fun onResponse(
                             call: Call<ApiCurrent>,

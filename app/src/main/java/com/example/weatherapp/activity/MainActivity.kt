@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
                 viewModel.getWeather(location.latitude, location.longitude)
                 viewModel.getForecast(location.latitude, location.longitude)
             } else {
+                viewModel.getForecast(0.89292, 32.09833)
                 Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
             }
         }
