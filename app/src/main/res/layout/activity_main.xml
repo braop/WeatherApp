@@ -23,7 +23,8 @@
         <RelativeLayout
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -88,17 +89,18 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/hour_forecast"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/margin_l"
-                            android:layout_marginTop="@dimen/margin_l"
+                            android:layout_marginTop="@dimen/margin_sm"
                             android:layout_marginEnd="@dimen/margin_l"
-                            android:layout_marginBottom="@dimen/margin_s"
-                            android:fontFamily="@font/bariol_bold"
-                            android:text='@{"Information About " +viewModel.summaryDetails.city.name}'
-                            android:textAllCaps="true"
+                            android:layout_marginBottom="@dimen/margin_m"
+                            android:fontFamily="@font/bariol_regular"
+                            android:text="@string/forecast_prediction"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m" />
+
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -106,7 +108,8 @@
                             android:layout_marginStart="@dimen/margin_ll"
                             android:layout_marginEnd="@dimen/margin_ll"
                             android:layout_marginBottom="@dimen/margin_l"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -213,7 +216,7 @@
                                 android:fontFamily="@font/bariol_regular"
                                 android:text='@{NumberFormat.getNumberInstance().format(viewModel.minTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/text_l"
+                                android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
                                 tools:text="25" />
 
@@ -223,7 +226,7 @@
                                 android:fontFamily="@font/bariol_regular"
                                 android:text="@string/min"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/text_l"
+                                android:textSize="@dimen/text_m"
                                 tools:text="min" />
 
                         </LinearLayout>
@@ -241,7 +244,7 @@
                                 android:fontFamily="@font/bariol_regular"
                                 android:text='@{NumberFormat.getNumberInstance().format(viewModel.currentTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/text_l"
+                                android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
                                 tools:text="25" />
 
@@ -252,7 +255,7 @@
                                 android:text="@string/current"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/text_l"
+                                android:textSize="@dimen/text_m"
                                 tools:text="Current" />
                         </LinearLayout>
 
@@ -269,7 +272,7 @@
                                 android:fontFamily="@font/bariol_regular"
                                 android:text='@{NumberFormat.getNumberInstance().format(viewModel.maxTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/text_l"
+                                android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
                                 tools:text="25" />
 
@@ -280,7 +283,7 @@
                                 android:text="@string/max"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/text_l"
+                                android:textSize="@dimen/text_m"
                                 tools:text="max" />
 
                         </LinearLayout>
@@ -310,6 +313,39 @@
             android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}" />
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_l"
+                android:layout_marginTop="@dimen/margin_l"
+                android:layout_marginEnd="@dimen/margin_l"
+                android:fontFamily="@font/bariol_bold"
+                android:text='@{viewModel.summaryDetails.city.name}'
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_m" />
+
+            <TextView
+                android:id="@+id/time_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_l"
+                android:layout_marginEnd="@dimen/margin_l"
+                android:layout_marginBottom="@dimen/margin_l"
+                android:fontFamily="@font/bariol_regular"
+                android:text='@{viewModel.timeInfoUpdate}'
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_ss" />
+
+        </LinearLayout>
 
 
     </RelativeLayout>

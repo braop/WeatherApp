@@ -29,7 +29,7 @@
             android:maxLines="1"
             android:text="@{forecast.dayName}"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_l"
+            android:textSize="@dimen/text_m"
             tools:text="Tuesday" />
 
         <LinearLayout
@@ -58,6 +58,7 @@
                 android:layout_alignParentEnd="true"
                 android:text='@{NumberFormat.getNumberInstance().format(forecast.temp)+ "\u00B0"}'
                 android:textAlignment="textEnd"
+                android:textSize="@dimen/text_m"
                 android:textColor="@color/white"
                 tools:text="25" />
 

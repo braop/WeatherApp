@@ -60,15 +60,17 @@ class MainActivity : AppCompatActivity(), MainInterface {
             "Clouds" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_cloudy)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
-
+                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
             }
             "Rain" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_rainy)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
+                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
             }
             "Clear" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_sunny)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
+                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
             }
         }
     }

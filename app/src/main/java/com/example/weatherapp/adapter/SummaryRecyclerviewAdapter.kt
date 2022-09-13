@@ -27,6 +27,8 @@ class SummaryRecyclerviewAdapter :
         holder.binding.summary = forecast
 
         holder.binding.dateTime.text = getDayName(forecast?.dtTxt?.trim()?.substring(0, 10))
+        holder.binding.time.text = forecast?.dtTxt?.trim()?.substring(11, 16)
+        //2202-02-20 00:00:00
 
         when (forecast?.weather?.get(0)?.main) {
             "Clouds" -> {

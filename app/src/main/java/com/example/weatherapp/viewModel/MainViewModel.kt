@@ -17,6 +17,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -39,6 +42,10 @@ class MainViewModel @Inject constructor(
     val listOfForecasts = arrayListOf<ForecastModel>()
     val loading = ObservableBoolean(false)
     var navigator: MainInterface? = null
+    var timeInfoUpdate = ObservableField<String>()
+
+    val current: LocalDateTime? = LocalDateTime.now()
+    val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
@@ -145,7 +152,6 @@ class MainViewModel @Inject constructor(
                                 feelsLike.set(it.main?.feelsLike?.toInt().toString())
                                 generateStatus(it.weather?.get(0)?.main)
                                 navigator?.onSuccess(it.weather?.get(0)?.main)
-
                             }
                             loading.set(false)
                         }
@@ -171,15 +177,21 @@ class MainViewModel @Inject constructor(
     }
 
     private fun generateStatus(status: String?) {
+
+        val formatted = current?.format(formatter)
+
         when (status) {
             "Clouds" -> {
                 currentStatus.set("Cloudy")
+                timeInfoUpdate.set(formatted.toString() + ", Mostly Cloudy")
             }
             "Rain" -> {
                 currentStatus.set("Rainy")
+                timeInfoUpdate.set(formatted.toString() + ", Mostly Rainy")
             }
             "Clear" -> {
                 currentStatus.set("Sunny")
+                timeInfoUpdate.set(formatted.toString() + ", Mostly Clear Sky")
             }
         }
     }
