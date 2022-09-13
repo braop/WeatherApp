@@ -12,6 +12,7 @@ import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
 import com.example.weatherapp.clients.WeatherClient
 import com.example.weatherapp.models.ForecastModel
+import com.example.weatherapp.repository.ForecastRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +28,8 @@ import javax.inject.Singleton
 @Singleton
 class MainViewModel @Inject constructor(
     private val forecastClient: ForecastClient,
-    private val weatherClient: WeatherClient
+    private val weatherClient: WeatherClient,
+    private val forecastRepository: ForecastRepository
 ) : ViewModel() {
 
     val currentWeather = ObservableField<ApiCurrent>()

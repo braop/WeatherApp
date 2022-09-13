@@ -2,7 +2,9 @@ package com.example.weatherapp
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.example.weatherapp.api.ApiService
+import com.example.weatherapp.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -22,5 +24,13 @@ class AppModule(private val application: Application) {
         return ApiService(application).service
     }
 
+    @Singleton
+    @Provides
+    fun provideDb(context: Context): AppDatabase {
+        return Room
+            .databaseBuilder(context, AppDatabase::class.java, "weatherDB")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 
 }
