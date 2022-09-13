@@ -3,6 +3,7 @@ package com.example.weatherapp.activity
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -14,6 +15,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.db.entity.ForecastEntity
 import com.example.weatherapp.viewModel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -73,6 +75,18 @@ class MainActivity : AppCompatActivity(), MainInterface {
                 binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
             }
         }
+    }
+
+    override fun onInsertForecastSuccess() {
+        Log.d("TAG", "onInsertForecastSuccess: Successful")
+    }
+
+    override fun onInsertForecastSError() {
+        Log.d("TAG", "onInsertForecastSuccess: Error")
+    }
+
+    override fun onSelectForecastSuccess(forecastEntity: ForecastEntity) {
+        Toast.makeText(this, forecastEntity.toString(), Toast.LENGTH_SHORT).show()
     }
 
     override fun onError() {
@@ -162,5 +176,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
 interface MainInterface {
     fun onSuccess(status: String?)
+    fun onInsertForecastSuccess()
+    fun onInsertForecastSError()
+    fun onSelectForecastSuccess(forecastEntity: ForecastEntity)
     fun onError()
 }

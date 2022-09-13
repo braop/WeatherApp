@@ -30,6 +30,7 @@ class AppModule(private val application: Application) {
         return Room
             .databaseBuilder(context, AppDatabase::class.java, "weatherDB")
             .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
             .build()
     }
 

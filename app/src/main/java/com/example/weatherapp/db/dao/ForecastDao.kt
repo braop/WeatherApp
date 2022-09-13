@@ -10,11 +10,10 @@ import io.reactivex.rxjava3.core.Single
 @Dao
 interface ForecastDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun addForecast(forecastEntity: ForecastEntity): Long
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertForecast(forecastEntity: ForecastEntity): Single<Long>
 
-   @Query("SELECT *From forecast")
-    fun getAllForecasts(): ForecastEntity
-
+    @Query("SELECT *From forecast")
+    fun selectForecast(): Single<ForecastEntity>
 
 }

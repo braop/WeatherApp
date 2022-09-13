@@ -2,6 +2,7 @@ package com.example.weatherapp.viewModel
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.example.weatherapp.api.response.ApiForecast
 import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
 import com.example.weatherapp.clients.WeatherClient
+import com.example.weatherapp.db.entity.ForecastEntity
 import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.repository.ForecastRepository
 import retrofit2.Call
@@ -46,11 +48,13 @@ class MainViewModel @Inject constructor(
     var navigator: MainInterface? = null
     var timeInfoUpdate = ObservableField<String>()
 
-    val current: LocalDateTime? = LocalDateTime.now()
-    val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+    private val current: LocalDateTime? = LocalDateTime.now()
+    private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
+        insertForeCast(ForecastEntity(1))
+        selectForecast()
     }
 
     fun getForecast(latitude: Double?, longitude: Double?) {
@@ -131,6 +135,28 @@ class MainViewModel @Inject constructor(
         val cal = Calendar.getInstance()
         cal.set(date.year, date.month, date.day)
         return DateFormatSymbols().weekdays[cal[Calendar.DAY_OF_WEEK]]
+    }
+
+    private fun insertForeCast(forecastEntity: ForecastEntity) {
+        forecastRepository.insertForecast(forecastEntity).subscribe(
+            {
+                navigator?.onInsertForecastSuccess()
+            },
+            {
+                navigator?.onInsertForecastSError()
+            }
+        )
+    }
+
+    private fun selectForecast() {
+        forecastRepository.selectForeCast().subscribe(
+            {
+                navigator?.onSelectForecastSuccess(it)
+            },
+            {
+                navigator?.onError()
+            }
+        )
     }
 
     fun getWeather(
