@@ -10,7 +10,4 @@ class ForecastClient @Inject constructor(private val service: ApiService.IApiSer
 
     fun getForecast(latitude: Double, longitude: Double) =
         service.getForecast(latitude, longitude, Constants.APP_ID, Constants.UNITS)
-
-    fun getWeather(latitude: Double, longitude: Double) =
-        service.getWeather(latitude, longitude, Constants.APP_ID, Constants.UNITS)
 }

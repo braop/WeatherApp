@@ -1,19 +1,24 @@
 package com.example.weatherapp.activity
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
+import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.viewModel.MainViewModel
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import javax.inject.Inject
+
 
 class MainActivity : AppCompatActivity(), MainInterface {
 
@@ -41,6 +46,12 @@ class MainActivity : AppCompatActivity(), MainInterface {
             adapter = ForecastRecyclerviewAdapter()
         }
 
+        binding.summaryRecyclerview.apply {
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = SummaryRecyclerviewAdapter()
+        }
+
     }
 
     override fun onSuccess(status: String?) {
@@ -49,15 +60,17 @@ class MainActivity : AppCompatActivity(), MainInterface {
             "Clouds" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_cloudy)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
-
+                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
             }
             "Rain" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_rainy)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
+                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
             }
-            "Sun" -> {
+            "Clear" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_sunny)
                 binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
+                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
             }
         }
     }
@@ -75,41 +88,74 @@ class MainActivity : AppCompatActivity(), MainInterface {
         when (requestCode) {
             PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Location granted", Toast.LENGTH_SHORT).show()
+                    getLastKnownLocation()
                 } else {
-                    Toast.makeText(this, "Permission not granted", Toast.LENGTH_LONG).show()
+                    // permission not granted
                 }
+            }
+            else -> {
+
             }
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (ContextCompat.checkSelfPermission(
+                this,
+                ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            getLastKnownLocation()
+        } else {
+            askLocationPermission()
+        }
+    }
 
-    private fun setUpLocationListener() {
-        val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(500)
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+    private fun getLastKnownLocation() {
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener(this) { location ->
+            if (location != null) {
+                viewModel.getWeather(location.latitude, location.longitude)
+                viewModel.getForecast(location.latitude, location.longitude)
+            } else {
+                Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    super.onLocationResult(locationResult)
+    private fun askLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
 
-                    Toast.makeText(
-                        this@MainActivity,
-                        "onLocationResult: ${locationResult.lastLocation?.latitude} ${locationResult.lastLocation?.longitude}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    ACCESS_FINE_LOCATION
+                )
+            ) {
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE
+                )
+            } else {
 
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE
+                )
 
-                }
-            },
-            Looper.myLooper()
-        )
+            }
 
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.destroy()
     }
 
     companion object {
-        private const val PERMISSION_REQUEST_CODE = 1
+        private const val PERMISSION_REQUEST_CODE = 1000
     }
 
 }
@@ -118,20 +164,3 @@ interface MainInterface {
     fun onSuccess(status: String?)
     fun onError()
 }
-
-/*when {
-                        PermissionLocation.isLocationEnabled(this) -> {
-                            setUpLocationListener()
-                        }
-                        else -> {
-                            //show dialog to enable location
-                            AlertDialog.Builder(this)
-                                .setTitle("Allow Location Permission")
-                                .setMessage("This is required")
-                                .setCancelable(false)
-                                .setPositiveButton("Enable now") { _, _ ->
-                                    this.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                                }
-                                .show()
-                        }
-                    }*/

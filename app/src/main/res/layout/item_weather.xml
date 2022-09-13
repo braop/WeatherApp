@@ -4,9 +4,11 @@
 
     <data>
 
+        <import type="java.text.NumberFormat" />
+
         <variable
-            name="apiList"
-            type="com.example.weatherapp.api.response.ApiList" />
+            name="forecast"
+            type="com.example.weatherapp.models.ForecastModel" />
 
     </data>
 
@@ -19,10 +21,13 @@
         android:padding="@dimen/margin_s">
 
         <TextView
+            android:id="@+id/day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@{apiList.dtTxt}"
+            android:fontFamily="@font/bariol_regular"
+            android:maxLines="1"
+            android:text="@{forecast.dayName}"
             android:textColor="@color/white"
             android:textSize="@dimen/text_m"
             tools:text="Tuesday" />
@@ -36,8 +41,7 @@
             <ImageView
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -49,20 +53,15 @@
 
             <TextView
                 android:id="@+id/temperature"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:text='@{NumberFormat.getNumberInstance().format(forecast.temp)+ "\u00B0"}'
+                android:textAlignment="textEnd"
+                android:textSize="@dimen/text_m"
                 android:textColor="@color/white"
                 tools:text="25" />
 
-            <TextView
-                android:id="@+id/degree"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/temperature"
-                android:text="@string/o_"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_m" />
 
         </RelativeLayout>
 

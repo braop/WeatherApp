@@ -8,6 +8,8 @@
 
         <import type="android.view.View" />
 
+        <import type="java.text.NumberFormat" />
+
         <variable
             name="viewModel"
             type="com.example.weatherapp.viewModel.MainViewModel" />
@@ -21,7 +23,8 @@
         <RelativeLayout
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -41,49 +44,34 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:contentDescription="@string/main_header_image"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/sea_rainy" />
+                            android:scaleType="fitXY" />
 
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/margin_lll"
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <RelativeLayout
-                                android:id="@+id/temp_layout"
-                                android:layout_width="wrap_content"
+
+                            <TextView
+                                android:id="@+id/temperature"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/margin_s">
+                                android:layout_marginEnd="@dimen/margin_s"
+                                android:fontFamily="@font/bariol_regular"
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.currentTemp)+"\u00B0"}'
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_llll"
+                                tools:text="25" />
 
-                                <TextView
-                                    android:id="@+id/temperature"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:layout_marginEnd="@dimen/margin_s"
-                                    android:text="@{viewModel.currentTemp}"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_llll"
-                                    android:textStyle="bold"
-                                    tools:text="25" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_toEndOf="@+id/temperature"
-                                    android:text="@string/o_"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_ll"
-                                    android:textStyle="bold" />
-
-                            </RelativeLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/bariol_regular"
                                 android:text="@{viewModel.currentStatus}"
                                 android:textAllCaps="true"
                                 android:textColor="@color/white"
@@ -94,6 +82,118 @@
 
 
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/hour_forecast"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_l"
+                            android:layout_marginTop="@dimen/margin_sm"
+                            android:layout_marginEnd="@dimen/margin_l"
+                            android:layout_marginBottom="@dimen/margin_m"
+                            android:fontFamily="@font/bariol_bold"
+                            android:text="@string/forecast_prediction"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_m" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_ll"
+                            android:layout_marginEnd="@dimen/margin_ll"
+                            android:layout_marginBottom="@dimen/margin_l"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="start">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/margin_s"
+                                    android:src="@drawable/polpulation_size" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/bariol_regular"
+                                    android:text="@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.population)}"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_ss" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/margin_s"
+                                    android:src="@drawable/sun_rise" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/bariol_regular"
+                                    android:text='@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.sunrise)}'
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_ss" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/margin_s"
+                                    android:src="@drawable/sun_set" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/bariol_regular"
+                                    android:text="@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.sunset)}"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_ss" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/summary_recyclerview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin_s"
+                            android:overScrollMode="never"
+                            app:summary="@{viewModel.summary}" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -113,15 +213,17 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.minTemp}"
+                                android:fontFamily="@font/bariol_regular"
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.minTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
                                 tools:text="25" />
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/bariol_regular"
                                 android:text="@string/min"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
@@ -139,16 +241,19 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.currentTemp}"
+                                android:fontFamily="@font/bariol_regular"
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.currentTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
                                 tools:text="25" />
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/bariol_regular"
                                 android:text="@string/current"
+                                android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 tools:text="Current" />
@@ -164,16 +269,19 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.maxTemp}"
+                                android:fontFamily="@font/bariol_regular"
+                                android:text='@{NumberFormat.getNumberInstance().format(viewModel.maxTemp)+"\u00B0"}'
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 android:textStyle="bold"
                                 tools:text="25" />
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/bariol_regular"
                                 android:text="@string/max"
+                                android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_m"
                                 tools:text="max" />
@@ -193,7 +301,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
-                        app:forecasts="@{viewModel.forecasts}" />
+                        app:forecast="@{viewModel.forecasts}" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
@@ -205,6 +313,41 @@
             android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}" />
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/windowBackground"
+            android:elevation="1dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_l"
+                android:layout_marginTop="@dimen/margin_l"
+                android:layout_marginEnd="@dimen/margin_l"
+                android:fontFamily="@font/bariol_bold"
+                android:text='@{viewModel.summaryDetails.city.name}'
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_m" />
+
+            <TextView
+                android:id="@+id/time_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_l"
+                android:layout_marginEnd="@dimen/margin_l"
+                android:layout_marginBottom="@dimen/margin_l"
+                android:fontFamily="@font/bariol_regular"
+                android:text='@{viewModel.timeInfoUpdate}'
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_ss" />
+
+        </LinearLayout>
 
 
     </RelativeLayout>
