@@ -24,7 +24,8 @@
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_layout">
+            android:layout_above="@+id/bottom_layout"
+            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -321,7 +322,8 @@
             android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
             android:elevation="1dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
 
             <TextView
                 android:layout_width="wrap_content"
