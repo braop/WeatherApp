@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherapp.activity.MainInterface
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
+import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
 import com.example.weatherapp.clients.WeatherClient
 import com.example.weatherapp.models.ForecastModel
@@ -34,6 +35,7 @@ class MainViewModel @Inject constructor(
     val maxTemp = ObservableField<Int>()
     val forecasts = ObservableField<List<ForecastModel>>()
     val summaryDetails = ObservableField<ApiForecast>()
+    val summary = ObservableField<List<ApiList>>()
     val listOfForecasts = arrayListOf<ForecastModel>()
     val loading = ObservableBoolean(false)
     var navigator: MainInterface? = null
@@ -57,6 +59,7 @@ class MainViewModel @Inject constructor(
                                 summaryDetails.set(it)
                                 minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt())
                                 maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt())
+                                summary.set(it.list)
 
                                 it.list?.forEach { apiList ->
 

@@ -3,10 +3,6 @@
     <string name="min">min</string>
     <string name="current">Current</string>
     <string name="max">max</string>
-    <string name="rainy">Rainy</string>
     <string name="main_header_image">main header image</string>
 
-    <string name="base_url">http://api.openweathermap.org/data/2.5/</string>
-    <string name="o_">o</string>
-    <string name="area_population">Area Population:</string>
 </resources>

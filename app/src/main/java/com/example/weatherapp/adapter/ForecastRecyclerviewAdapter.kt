@@ -33,7 +33,6 @@ class ForecastRecyclerviewAdapter :
                 holder.binding.icon.setImageResource(R.drawable.sun)
             }
         }
-        // change icons here
     }
 
     override fun getItemCount() = forecasts?.size ?: 0
