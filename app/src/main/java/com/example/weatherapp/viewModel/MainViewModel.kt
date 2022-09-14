@@ -63,7 +63,6 @@ class MainViewModel @Inject constructor(
 
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
-        //selectForecast()
     }
 
     fun getForecast(latitude: Double?, longitude: Double?) {
@@ -140,6 +139,8 @@ class MainViewModel @Inject constructor(
                                     forecasts.get(),
                                     detailedForecasts.get()
                                 )
+
+
                                 loading.set(false)
                             }
 
