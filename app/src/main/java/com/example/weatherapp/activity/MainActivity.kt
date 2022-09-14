@@ -3,7 +3,6 @@ package com.example.weatherapp.activity
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -62,28 +61,56 @@ class MainActivity : AppCompatActivity(), MainInterface {
         when (status) {
             "Clouds" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_cloudy)
-                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
-                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
+                binding.mainLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_cloudy
+                    )
+                )
+                binding.bottomLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_cloudy
+                    )
+                )
             }
             "Rain" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_rainy)
-                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
-                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
+                binding.mainLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_rainy
+                    )
+                )
+                binding.bottomLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_rainy
+                    )
+                )
             }
             "Clear" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_sunny)
-                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
-                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
+                binding.mainLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_sunny
+                    )
+                )
+                binding.bottomLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_sunny
+                    )
+                )
             }
         }
     }
 
     override fun onInsertForecastSuccess() {
-        Log.d("TAG", "onInsertForecastSuccess: Successful")
     }
 
     override fun onInsertForecastSError() {
-        Log.d("TAG", "onInsertForecastSuccess: Error")
     }
 
     override fun onSelectForecastSuccess(forecastEntity: ForecastEntity) {
