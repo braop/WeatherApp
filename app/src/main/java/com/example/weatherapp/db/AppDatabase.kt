@@ -7,7 +7,7 @@ import com.example.weatherapp.db.dao.WeatherDao
 import com.example.weatherapp.db.entity.*
 
 @Database(
-    entities = [ForecastEntity::class, MainEntity::class, ListEntity::class, CityEntity::class, WeatherEntity::class],
+    entities = [ForecastEntity::class, MainEntity::class, SummaryDetailEntity::class, CityEntity::class, WeatherEntity::class],
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
