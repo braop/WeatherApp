@@ -2,7 +2,6 @@ package com.example.weatherapp.viewModel
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
