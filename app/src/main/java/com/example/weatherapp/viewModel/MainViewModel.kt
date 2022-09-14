@@ -1,7 +1,6 @@
 package com.example.weatherapp.viewModel
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
@@ -52,8 +51,7 @@ class MainViewModel @Inject constructor(
 
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
-        insertForeCast(ForecastEntity(1))
-        selectForecast()
+        //selectForecast()
     }
 
     fun getForecast(latitude: Double?, longitude: Double?) {
@@ -76,7 +74,6 @@ class MainViewModel @Inject constructor(
                                 it.list?.forEach { apiList ->
 
                                     if (listOfForecasts.isEmpty()) {
-
                                         listOfForecasts.add(
                                             ForecastModel(
                                                 apiList.dtTxt?.trim()?.substring(0, 10),
@@ -85,17 +82,18 @@ class MainViewModel @Inject constructor(
                                                 apiList.weather?.get(0)?.main
                                             )
                                         )
+
                                     } else {
-                                        var boo = 0;
+                                        var count = 0;
                                         listOfForecasts.forEach {
                                             if (it.dateText.equals(
                                                     apiList.dtTxt?.trim()?.substring(0, 10)
                                                 )
                                             ) {
-                                                boo = 1
+                                                count = 1
                                             }
                                         }
-                                        if (boo == 0) {
+                                        if (count == 0) {
                                             listOfForecasts.add(
                                                 ForecastModel(
                                                     apiList.dtTxt?.trim()?.substring(0, 10),
@@ -110,17 +108,16 @@ class MainViewModel @Inject constructor(
                                     }
 
                                 }
-
                             }
-                            Log.d("TAG", "onResponse: $listOfForecasts")
+
                             forecasts.set(listOfForecasts)
+                            navigator?.onForecastSuccess(forecasts.get())
                             loading.set(false)
-                            // navigator?.onSuccess()
                         }
 
                         override fun onFailure(call: Call<ApiForecast>, t: Throwable) {
                             loading.set(false)
-                            navigator?.onError()
+                            navigator?.onError(t)
                         }
 
                     })
@@ -130,21 +127,25 @@ class MainViewModel @Inject constructor(
 
     @SuppressLint("SimpleDateFormat")
     fun getDayName(dateText: String?): String {
-        val date = SimpleDateFormat("yyyy-MM-dd").parse(dateText)
+        val date: Date? = SimpleDateFormat("yyyy-MM-dd").parse(dateText)
         val cal = Calendar.getInstance()
-        cal.set(date.year, date.month, date.day)
+        cal.set(date!!.year, date.month, date.day)
         return DateFormatSymbols().weekdays[cal[Calendar.DAY_OF_WEEK]]
     }
 
-    private fun insertForeCast(forecastEntity: ForecastEntity) {
-        forecastRepository.insertForecast(forecastEntity).subscribe(
+    private fun insertForecast(forecasts: ForecastEntity) {
+        forecastRepository.insertForecast(
+            forecasts
+        ).subscribe(
             {
                 navigator?.onInsertForecastSuccess()
+                selectForecast()
             },
             {
-                navigator?.onInsertForecastSError()
+                navigator?.onInsertForecastSError(it)
             }
         )
+
     }
 
     private fun selectForecast() {
@@ -153,7 +154,29 @@ class MainViewModel @Inject constructor(
                 navigator?.onSelectForecastSuccess(it)
             },
             {
-                navigator?.onError()
+                navigator?.onError(it)
+            }
+        )
+    }
+
+    fun deleteAllForecast(forecasts: List<ForecastModel>?) {
+        forecastRepository.deleteAllForeCast().subscribe(
+            {
+                forecasts?.forEach {
+                    insertForecast(
+                        ForecastEntity(
+                            null,
+                            it.dateText,
+                            it.dayName,
+                            it.temp,
+                            it.status
+                        )
+                    )
+                }
+
+            },
+            {
+                navigator?.onError(it)
             }
         )
     }
@@ -185,7 +208,7 @@ class MainViewModel @Inject constructor(
 
                         override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
                             loading.set(false)
-                            navigator?.onError()
+                            navigator?.onError(t)
                         }
 
                     })

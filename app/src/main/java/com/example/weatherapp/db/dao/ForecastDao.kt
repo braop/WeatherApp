@@ -13,5 +13,11 @@ interface ForecastDao {
     fun insertForecast(forecastEntity: ForecastEntity): Single<Long>
 
     @Query("SELECT *From forecast")
-    fun selectForecast(): Single<ForecastEntity>
+    fun selectForecast(): Single<List<ForecastEntity>>
+
+    @Query("SELECT COUNT(*) From forecast")
+    fun selectCountForecast(): Single<Long>
+
+    @Query("DELETE FROM forecast")
+    fun deleteAllForecast(): Single<Int>
 }

@@ -15,6 +15,7 @@ import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.db.entity.ForecastEntity
+import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.viewModel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -110,15 +111,22 @@ class MainActivity : AppCompatActivity(), MainInterface {
     override fun onInsertForecastSuccess() {
     }
 
-    override fun onInsertForecastSError() {
+    override fun onInsertForecastSError(it: Throwable) {
     }
 
-    override fun onSelectForecastSuccess(forecastEntity: ForecastEntity) {
-        Toast.makeText(this, forecastEntity.toString(), Toast.LENGTH_SHORT).show()
+    override fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>) {
     }
 
-    override fun onError() {
-        Toast.makeText(this, "Error, Please try again", Toast.LENGTH_SHORT).show()
+    override fun onError(t: Throwable) {
+        Toast.makeText(
+            this,
+            "There was an Error, Please restart the weather app",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onForecastSuccess(forecasts: List<ForecastModel>?) {
+        viewModel.deleteAllForecast(forecasts)
     }
 
     override fun onRequestPermissionsResult(
@@ -205,7 +213,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
 interface MainInterface {
     fun onSuccess(status: String?)
     fun onInsertForecastSuccess()
-    fun onInsertForecastSError()
-    fun onSelectForecastSuccess(forecastEntity: ForecastEntity)
-    fun onError()
+    fun onInsertForecastSError(it: Throwable)
+    fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>)
+    fun onError(t: Throwable)
+    fun onForecastSuccess(forecasts: List<ForecastModel>?)
 }

@@ -14,8 +14,12 @@ class ForecastRepository @Inject constructor(
         return db.forecastDao().insertForecast(forecastEntity)
     }
 
-    fun selectForeCast(): Single<ForecastEntity> {
+    fun selectForeCast(): Single<List<ForecastEntity>> {
         return db.forecastDao().selectForecast()
+    }
+
+    fun deleteAllForeCast(): Single<Int> {
+        return db.forecastDao().deleteAllForecast()
     }
 }
 
