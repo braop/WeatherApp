@@ -57,6 +57,8 @@ class MainViewModel @Inject constructor(
     val listOfForecasts = arrayListOf<ForecastModel>()
 
     val loading = ObservableBoolean(false)
+    val online = ObservableField(false)
+
     var navigator: MainInterface? = null
     var timeInfoUpdate = ObservableField<String>()
 
@@ -70,6 +72,7 @@ class MainViewModel @Inject constructor(
     fun getForecast(latitude: Double?, longitude: Double?) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
+            online.set(true)
             latitude?.let { lat ->
                 longitude?.let { long ->
                     forecastClient.getForecast(lat, long)
@@ -157,6 +160,7 @@ class MainViewModel @Inject constructor(
             }
         } else {
             // no internet connection
+            online.set(false)
             selectForecastLocalDB()
             selectDetailedForecastsLocalDB()
         }
