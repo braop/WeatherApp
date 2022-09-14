@@ -9,5 +9,8 @@ data class WeatherEntity constructor(
     var id: Int?,
     var main: String?,
     var description: String?,
-    var icon: String?
+    var minTemp: Int?,
+    var maxTemp: Int?,
+    var temp: Int?,
+    var itFeelsLike: Int?
 )

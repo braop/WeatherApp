@@ -3,6 +3,7 @@ package com.example.weatherapp.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.weatherapp.db.dao.ForecastDao
+import com.example.weatherapp.db.dao.WeatherDao
 import com.example.weatherapp.db.entity.*
 
 @Database(
@@ -11,4 +12,5 @@ import com.example.weatherapp.db.entity.*
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun forecastDao(): ForecastDao
+    abstract fun weatherDao(): WeatherDao
 }

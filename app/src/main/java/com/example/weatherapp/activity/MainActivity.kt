@@ -13,8 +13,10 @@ import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
+import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.db.entity.ForecastEntity
+import com.example.weatherapp.db.entity.WeatherEntity
 import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.viewModel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -114,6 +116,10 @@ class MainActivity : AppCompatActivity(), MainInterface {
     override fun onInsertForecastSError(it: Throwable) {
     }
 
+    override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?) {
+        viewModel.deleteWeather(currentWeather)
+    }
+
     override fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>) {
     }
 
@@ -165,7 +171,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
     private fun getLastKnownLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener(this) { location ->
             if (location != null) {
-                viewModel.getWeather(location.latitude, location.longitude)
+                viewModel.getWeatherApi(location.latitude, location.longitude)
                 viewModel.getForecast(location.latitude, location.longitude)
             } else {
                 Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
@@ -214,6 +220,7 @@ interface MainInterface {
     fun onSuccess(status: String?)
     fun onInsertForecastSuccess()
     fun onInsertForecastSError(it: Throwable)
+    fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?)
     fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>)
     fun onError(t: Throwable)
     fun onForecastSuccess(forecasts: List<ForecastModel>?)

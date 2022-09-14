@@ -1,9 +1,11 @@
 package com.example.weatherapp.viewModel
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.activity.MainInterface
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
@@ -11,8 +13,10 @@ import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
 import com.example.weatherapp.clients.WeatherClient
 import com.example.weatherapp.db.entity.ForecastEntity
+import com.example.weatherapp.db.entity.WeatherEntity
 import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.repository.ForecastRepository
+import com.example.weatherapp.repository.WeatherRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +33,9 @@ import javax.inject.Singleton
 class MainViewModel @Inject constructor(
     private val forecastClient: ForecastClient,
     private val weatherClient: WeatherClient,
-    private val forecastRepository: ForecastRepository
+    private val forecastRepository: ForecastRepository,
+    private val weatherRepository: WeatherRepository,
+    val context: Context
 ) : ViewModel() {
 
     val currentWeather = ObservableField<ApiCurrent>()
@@ -55,45 +61,26 @@ class MainViewModel @Inject constructor(
     }
 
     fun getForecast(latitude: Double?, longitude: Double?) {
-        loading.set(true)
-        latitude?.let { lat ->
-            longitude?.let { long ->
-                forecastClient.getForecast(lat, long)
-                    .enqueue(object : Callback<ApiForecast> {
-                        override fun onResponse(
-                            call: Call<ApiForecast>,
-                            response: Response<ApiForecast>
-                        ) {
-                            response.body()?.let {
+        if ((context as CustomApplication).isNetworkConnected(context)) {
+            loading.set(true)
+            latitude?.let { lat ->
+                longitude?.let { long ->
+                    forecastClient.getForecast(lat, long)
+                        .enqueue(object : Callback<ApiForecast> {
+                            override fun onResponse(
+                                call: Call<ApiForecast>,
+                                response: Response<ApiForecast>
+                            ) {
+                                response.body()?.let {
 
-                                summaryDetails.set(it)
-                                minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt())
-                                maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt())
-                                summary.set(it.list)
+                                    summaryDetails.set(it)
+                                    minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt())
+                                    maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt())
+                                    summary.set(it.list)
 
-                                it.list?.forEach { apiList ->
+                                    it.list?.forEach { apiList ->
 
-                                    if (listOfForecasts.isEmpty()) {
-                                        listOfForecasts.add(
-                                            ForecastModel(
-                                                apiList.dtTxt?.trim()?.substring(0, 10),
-                                                getDayName(apiList.dtTxt?.trim()?.substring(0, 10)),
-                                                apiList.main?.temp?.toInt(),
-                                                apiList.weather?.get(0)?.main
-                                            )
-                                        )
-
-                                    } else {
-                                        var count = 0;
-                                        listOfForecasts.forEach {
-                                            if (it.dateText.equals(
-                                                    apiList.dtTxt?.trim()?.substring(0, 10)
-                                                )
-                                            ) {
-                                                count = 1
-                                            }
-                                        }
-                                        if (count == 0) {
+                                        if (listOfForecasts.isEmpty()) {
                                             listOfForecasts.add(
                                                 ForecastModel(
                                                     apiList.dtTxt?.trim()?.substring(0, 10),
@@ -104,25 +91,52 @@ class MainViewModel @Inject constructor(
                                                     apiList.weather?.get(0)?.main
                                                 )
                                             )
-                                        }
-                                    }
 
+                                        } else {
+                                            var count = 0;
+                                            listOfForecasts.forEach {
+                                                if (it.dateText.equals(
+                                                        apiList.dtTxt?.trim()?.substring(0, 10)
+                                                    )
+                                                ) {
+                                                    count = 1
+                                                }
+                                            }
+                                            if (count == 0) {
+                                                listOfForecasts.add(
+                                                    ForecastModel(
+                                                        apiList.dtTxt?.trim()?.substring(0, 10),
+                                                        getDayName(
+                                                            apiList.dtTxt?.trim()?.substring(0, 10)
+                                                        ),
+                                                        apiList.main?.temp?.toInt(),
+                                                        apiList.weather?.get(0)?.main
+                                                    )
+                                                )
+                                            }
+                                        }
+
+                                    }
                                 }
+
+                                forecasts.set(listOfForecasts)
+                                navigator?.onForecastSuccess(forecasts.get())
+                                loading.set(false)
                             }
 
-                            forecasts.set(listOfForecasts)
-                            navigator?.onForecastSuccess(forecasts.get())
-                            loading.set(false)
-                        }
+                            override fun onFailure(call: Call<ApiForecast>, t: Throwable) {
+                                loading.set(false)
+                                navigator?.onError(t)
+                            }
 
-                        override fun onFailure(call: Call<ApiForecast>, t: Throwable) {
-                            loading.set(false)
-                            navigator?.onError(t)
-                        }
-
-                    })
+                        })
+                }
             }
+        } else {
+            // no internet connection
+            selectForecastLocalDB()
         }
+
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -139,7 +153,6 @@ class MainViewModel @Inject constructor(
         ).subscribe(
             {
                 navigator?.onInsertForecastSuccess()
-                selectForecast()
             },
             {
                 navigator?.onInsertForecastSError(it)
@@ -148,12 +161,28 @@ class MainViewModel @Inject constructor(
 
     }
 
-    private fun selectForecast() {
+    private fun selectForecastLocalDB() {
+        loading.set(true)
         forecastRepository.selectForeCast().subscribe(
             {
+                it.forEach {
+                    listOfForecasts.add(
+                        ForecastModel(
+                            it.dateText,
+                            it.dayName,
+                            it.temp,
+                            it.status
+                        )
+                    )
+                }
+                forecasts.set(listOfForecasts)
+
+                loading.set(false)
                 navigator?.onSelectForecastSuccess(it)
             },
             {
+                // Tell user to check internet connection
+                loading.set(false)
                 navigator?.onError(it)
             }
         )
@@ -181,39 +210,96 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun getWeather(
+    fun deleteWeather(currentWeather: ApiCurrent?) {
+        weatherRepository.deleteAllWeather().subscribe(
+            {
+                insertWeather(currentWeather)
+            },
+            {
+
+            }
+        )
+    }
+
+
+    private fun insertWeather(currentWeather: ApiCurrent?) {
+        weatherRepository.insertWeather(
+            WeatherEntity(
+                null,
+                currentWeather?.weather?.get(0)?.main,
+                currentWeather?.weather?.get(0)?.description,
+                currentWeather?.main?.tempMax?.toInt(),
+                currentWeather?.main?.tempMin?.toInt(),
+                currentWeather?.main?.temp?.toInt(),
+                currentWeather?.main?.feelsLike?.toInt()
+            )
+        ).subscribe(
+            {
+            },
+            {
+
+            }
+        )
+    }
+
+    fun getWeatherApi(
         latitude: Double?,
         longitude: Double?
     ) {
-        loading.set(true)
-        latitude?.let { lat ->
-            longitude?.let { long ->
-                weatherClient.getWeather(lat, long)
-                    .enqueue(object : Callback<ApiCurrent> {
-                        override fun onResponse(
-                            call: Call<ApiCurrent>,
-                            response: Response<ApiCurrent>
-                        ) {
-                            response.body()?.let {
-                                currentWeather.set(it)
-                                minTemp.set(it.main?.tempMin?.toInt())
-                                maxTemp.set(it.main?.tempMax?.toInt())
-                                currentTemp.set(it.main?.temp?.toInt())
-                                feelsLike.set(it.main?.feelsLike?.toInt().toString())
-                                generateStatus(it.weather?.get(0)?.main)
-                                navigator?.onSuccess(it.weather?.get(0)?.main)
+        if ((context as CustomApplication).isNetworkConnected(context)) {
+            loading.set(true)
+            latitude?.let { lat ->
+                longitude?.let { long ->
+                    weatherClient.getWeather(lat, long)
+                        .enqueue(object : Callback<ApiCurrent> {
+                            override fun onResponse(
+                                call: Call<ApiCurrent>,
+                                response: Response<ApiCurrent>
+                            ) {
+                                response.body()?.let {
+                                    currentWeather.set(it)
+                                    minTemp.set(it.main?.tempMin?.toInt())
+                                    maxTemp.set(it.main?.tempMax?.toInt())
+                                    currentTemp.set(it.main?.temp?.toInt())
+                                    feelsLike.set(it.main?.feelsLike?.toInt().toString())
+                                    generateStatus(it.weather?.get(0)?.main)
+                                    navigator?.onSuccess(it.weather?.get(0)?.main)
+                                }
+                                loading.set(false)
+                                navigator?.onGetApiWeatherSuccess(currentWeather.get())
                             }
-                            loading.set(false)
-                        }
 
-                        override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
-                            loading.set(false)
-                            navigator?.onError(t)
-                        }
+                            override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
+                                loading.set(false)
+                                navigator?.onError(t)
+                            }
 
-                    })
+                        })
+                }
             }
+
+        } else {
+            // no internet connection
+            selectWeatherLocalDB()
         }
+    }
+
+    private fun selectWeatherLocalDB() {
+        loading.set(true)
+        weatherRepository.selectWeather().subscribe(
+            {
+                currentStatus.set(it.main)
+                currentTemp.set(it.temp)
+                minTemp.set(it.minTemp)
+                maxTemp.set(it.maxTemp)
+                generateStatus(it.main)
+                loading.set(false)
+                navigator?.onSuccess(it.main)
+            },
+            {
+                loading.set(false)
+            }
+        )
     }
 
     fun destroy() {
@@ -224,6 +310,7 @@ class MainViewModel @Inject constructor(
         minTemp.set(null)
         maxTemp.set(null)
         forecasts.set(null)
+        navigator = null
     }
 
     private fun generateStatus(status: String?) {
