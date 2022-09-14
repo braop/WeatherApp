@@ -48,6 +48,8 @@ class MainViewModel @Inject constructor(
     val minTemp = ObservableField<Int>()
     val maxTemp = ObservableField<Int>()
 
+    val city = ObservableField<String>()
+
     val detailedForecasts = ObservableField<List<DetailedForecastModel>>()
     val listOfDetailedForecasts = arrayListOf<DetailedForecastModel>()
 
@@ -80,6 +82,7 @@ class MainViewModel @Inject constructor(
 
                                     minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt())
                                     maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt())
+                                    city.set(it.city?.name)
 
                                     it.list?.forEach { apiList ->
 
@@ -311,7 +314,8 @@ class MainViewModel @Inject constructor(
                 currentWeather?.main?.tempMax?.toInt(),
                 currentWeather?.main?.tempMin?.toInt(),
                 currentWeather?.main?.temp?.toInt(),
-                currentWeather?.main?.feelsLike?.toInt()
+                currentWeather?.main?.feelsLike?.toInt(),
+                currentWeather?.name
             )
         ).subscribe(
             {
@@ -372,6 +376,7 @@ class MainViewModel @Inject constructor(
                 currentTemp.set(it.temp)
                 minTemp.set(it.minTemp)
                 maxTemp.set(it.maxTemp)
+                city.set(it.name)
                 generateStatus(it.main)
                 loading.set(false)
                 navigator?.onSuccess(it.main)

@@ -18,8 +18,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        >
+        android:overScrollMode="never">
 
         <RelativeLayout
             android:id="@+id/main_layout"
@@ -250,6 +249,7 @@
                 android:layout_marginTop="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_l"
                 android:fontFamily="@font/bariol_bold"
+                android:text="@{viewModel.city}"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_m" />
