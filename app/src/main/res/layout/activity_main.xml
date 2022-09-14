@@ -24,7 +24,8 @@
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_layout">
+            android:layout_above="@+id/bottom_layout"
+            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -101,89 +102,6 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m" />
 
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_ll"
-                            android:layout_marginEnd="@dimen/margin_ll"
-                            android:layout_marginBottom="@dimen/margin_l"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="start">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/margin_s"
-                                    android:src="@drawable/polpulation_size" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:fontFamily="@font/bariol_regular"
-                                    android:text="@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.population)}"
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_ss" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/margin_s"
-                                    android:src="@drawable/sun_rise" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/bariol_regular"
-                                    android:text='@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.sunrise)}'
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_ss" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="end">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/margin_s"
-                                    android:src="@drawable/sun_set" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:fontFamily="@font/bariol_regular"
-                                    android:text="@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.sunset)}"
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_ss" />
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/summary_recyclerview"
                             android:layout_width="wrap_content"
@@ -191,7 +109,7 @@
                             android:layout_gravity="center"
                             android:layout_marginBottom="@dimen/margin_s"
                             android:overScrollMode="never"
-                            app:summary="@{viewModel.summary}" />
+                            app:detailed_forecast="@{viewModel.detailedForecasts}" />
 
                     </LinearLayout>
 
@@ -321,31 +239,56 @@
             android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
             android:elevation="1dp"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_l"
-                android:layout_marginTop="@dimen/margin_l"
-                android:layout_marginEnd="@dimen/margin_l"
-                android:fontFamily="@font/bariol_bold"
-                android:text='@{viewModel.summaryDetails.city.name}'
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_m" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_l">
 
-            <TextView
-                android:id="@+id/time_update"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_s"
+                    android:fontFamily="@font/bariol_bold"
+                    android:text="@{viewModel.city}"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_m" />
+
+                <TextView
+                    android:id="@+id/time_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bariol_regular"
+                    android:text='@{viewModel.timeInfoUpdate}'
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_ss" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_l"
-                android:layout_marginEnd="@dimen/margin_l"
-                android:layout_marginBottom="@dimen/margin_l"
-                android:fontFamily="@font/bariol_regular"
-                android:text='@{viewModel.timeInfoUpdate}'
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_ss" />
+                android:padding="@dimen/margin_l"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bariol_regular"
+                    android:text="@string/you_re_offline"
+                    android:textColor="@color/white"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/text_s"
+                    android:visibility="@{viewModel.online == true ? View.GONE : View.VISIBLE}" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

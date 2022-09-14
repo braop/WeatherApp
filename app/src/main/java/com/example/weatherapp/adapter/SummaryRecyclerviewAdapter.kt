@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
-import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.databinding.ItemSummaryBinding
+import com.example.weatherapp.models.DetailedForecastModel
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
@@ -14,7 +14,7 @@ import java.util.*
 class SummaryRecyclerviewAdapter :
     RecyclerView.Adapter<SummaryRecyclerviewAdapter.BindingHolder>() {
 
-    var summaries: List<ApiList>? = null
+    var detailedForecasts: List<DetailedForecastModel>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,14 +23,14 @@ class SummaryRecyclerviewAdapter :
     }
 
     override fun onBindViewHolder(holder: BindingHolder, position: Int) {
-        val forecast = summaries?.get(position)
-        holder.binding.summary = forecast
+        val forecast = detailedForecasts?.get(position)
+        holder.binding.forecastDetails = forecast
 
         holder.binding.dateTime.text = getDayName(forecast?.dtTxt?.trim()?.substring(0, 10))
         holder.binding.time.text = forecast?.dtTxt?.trim()?.substring(11, 16)
         //2202-02-20 00:00:00
 
-        when (forecast?.weather?.get(0)?.main) {
+        when (forecast?.weatherStatus) {
             "Clouds" -> {
                 holder.binding.icon.setImageResource(R.drawable.cloud)
             }
@@ -43,7 +43,7 @@ class SummaryRecyclerviewAdapter :
         }
     }
 
-    override fun getItemCount() = summaries?.size ?: 0
+    override fun getItemCount() = detailedForecasts?.size ?: 0
 
     @SuppressLint("SimpleDateFormat")
     fun getDayName(dateText: String?): String {

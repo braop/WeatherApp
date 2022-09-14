@@ -13,7 +13,11 @@ import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
+import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.db.entity.ForecastEntity
+import com.example.weatherapp.models.DetailedForecastModel
+import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.viewModel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,6 +39,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
         super.onCreate(savedInstanceState)
 
         (application as CustomApplication).getComponent().inject(this)
+
         binding.viewModel = viewModel
         viewModel.initiate(this)
 
@@ -59,24 +64,85 @@ class MainActivity : AppCompatActivity(), MainInterface {
         when (status) {
             "Clouds" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_cloudy)
-                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
-                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_cloudy))
+                binding.mainLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_cloudy
+                    )
+                )
+                binding.bottomLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_cloudy
+                    )
+                )
             }
             "Rain" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_rainy)
-                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
-                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_rainy))
+                binding.mainLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_rainy
+                    )
+                )
+                binding.bottomLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_rainy
+                    )
+                )
             }
             "Clear" -> {
                 binding.headerImage.setImageResource(R.drawable.forest_sunny)
-                binding.mainLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
-                binding.bottomLayout.setBackgroundColor(resources.getColor(R.color.color_sunny))
+                binding.mainLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_sunny
+                    )
+                )
+                binding.bottomLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_sunny
+                    )
+                )
             }
         }
     }
 
-    override fun onError() {
-        Toast.makeText(this, "Error, Please try again", Toast.LENGTH_SHORT).show()
+    override fun onInsertForecastSuccess() {
+    }
+
+    override fun onInsertDetailedForecastSuccess() {
+    }
+
+    override fun onInsertDetailedForecastError() {
+    }
+
+    override fun onInsertForecastError(it: Throwable) {
+    }
+
+    override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?) {
+        viewModel.deleteWeather(currentWeather)
+    }
+
+    override fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>) {
+    }
+
+    override fun onError(t: Throwable) {
+        Toast.makeText(
+            this,
+            "There was an Error, Please restart the weather app",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onForecastSuccess(
+        forecasts: List<ForecastModel>?,
+        detailedForecasts: List<DetailedForecastModel>?
+    ) {
+        viewModel.deleteAllForecast(forecasts)
+        viewModel.deleteDetailedForecasts(detailedForecasts)
     }
 
     override fun onRequestPermissionsResult(
@@ -115,7 +181,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
     private fun getLastKnownLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener(this) { location ->
             if (location != null) {
-                viewModel.getWeather(location.latitude, location.longitude)
+                viewModel.getWeatherApi(location.latitude, location.longitude)
                 viewModel.getForecast(location.latitude, location.longitude)
             } else {
                 Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
@@ -162,5 +228,15 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
 interface MainInterface {
     fun onSuccess(status: String?)
-    fun onError()
+    fun onInsertForecastSuccess()
+    fun onInsertDetailedForecastSuccess()
+    fun onInsertDetailedForecastError()
+    fun onInsertForecastError(it: Throwable)
+    fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?)
+    fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>)
+    fun onError(t: Throwable)
+    fun onForecastSuccess(
+        forecasts: List<ForecastModel>?,
+        detailedForecasts: List<DetailedForecastModel>?
+    )
 }
