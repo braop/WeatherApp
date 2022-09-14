@@ -6,7 +6,7 @@ import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
 import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
-import com.example.weatherapp.api.response.ApiList
+import com.example.weatherapp.models.DetailedForecastModel
 import com.example.weatherapp.models.ForecastModel
 
 object BindingAdapter {
@@ -25,13 +25,13 @@ object BindingAdapter {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    @BindingAdapter("summary")
+    @BindingAdapter("detailed_forecast")
     @JvmStatic
-    fun RecyclerView.setSummary(apiList: ObservableField<List<ApiList>>) {
+    fun RecyclerView.setSummary(detailedForecasts: ObservableField<List<DetailedForecastModel>>) {
 
         adapter?.apply {
             this as SummaryRecyclerviewAdapter
-            this.summaries = apiList.get()
+            this.detailedForecasts = detailedForecasts.get()
             notifyDataSetChanged()
         }
 

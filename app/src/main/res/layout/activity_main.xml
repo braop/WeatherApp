@@ -18,7 +18,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        >
 
         <RelativeLayout
             android:id="@+id/main_layout"
@@ -102,89 +103,6 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_m" />
 
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_ll"
-                            android:layout_marginEnd="@dimen/margin_ll"
-                            android:layout_marginBottom="@dimen/margin_l"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="start">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/margin_s"
-                                    android:src="@drawable/polpulation_size" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:fontFamily="@font/bariol_regular"
-                                    android:text="@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.population)}"
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_ss" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/margin_s"
-                                    android:src="@drawable/sun_rise" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/bariol_regular"
-                                    android:text='@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.sunrise)}'
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_ss" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="end">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/margin_s"
-                                    android:src="@drawable/sun_set" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:fontFamily="@font/bariol_regular"
-                                    android:text="@{NumberFormat.getNumberInstance().format(viewModel.summaryDetails.city.sunset)}"
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_ss" />
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/summary_recyclerview"
                             android:layout_width="wrap_content"
@@ -192,7 +110,7 @@
                             android:layout_gravity="center"
                             android:layout_marginBottom="@dimen/margin_s"
                             android:overScrollMode="never"
-                            app:summary="@{viewModel.summary}" />
+                            app:detailed_forecast="@{viewModel.detailedForecasts}" />
 
                     </LinearLayout>
 
@@ -332,7 +250,6 @@
                 android:layout_marginTop="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_l"
                 android:fontFamily="@font/bariol_bold"
-                android:text='@{viewModel.summaryDetails.city.name}'
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_m" />

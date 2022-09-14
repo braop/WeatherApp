@@ -9,12 +9,14 @@ import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.activity.MainInterface
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
-import com.example.weatherapp.api.response.ApiList
 import com.example.weatherapp.clients.ForecastClient
 import com.example.weatherapp.clients.WeatherClient
+import com.example.weatherapp.db.entity.DetailedForecastEntity
 import com.example.weatherapp.db.entity.ForecastEntity
 import com.example.weatherapp.db.entity.WeatherEntity
+import com.example.weatherapp.models.DetailedForecastModel
 import com.example.weatherapp.models.ForecastModel
+import com.example.weatherapp.repository.DetailedForecastRepository
 import com.example.weatherapp.repository.ForecastRepository
 import com.example.weatherapp.repository.WeatherRepository
 import retrofit2.Call
@@ -35,6 +37,7 @@ class MainViewModel @Inject constructor(
     private val weatherClient: WeatherClient,
     private val forecastRepository: ForecastRepository,
     private val weatherRepository: WeatherRepository,
+    private val detailedForecastRepository: DetailedForecastRepository,
     val context: Context
 ) : ViewModel() {
 
@@ -44,10 +47,13 @@ class MainViewModel @Inject constructor(
     val feelsLike = ObservableField<String>()
     val minTemp = ObservableField<Int>()
     val maxTemp = ObservableField<Int>()
+
+    val detailedForecasts = ObservableField<List<DetailedForecastModel>>()
+    val listOfDetailedForecasts = arrayListOf<DetailedForecastModel>()
+
     val forecasts = ObservableField<List<ForecastModel>>()
-    val summaryDetails = ObservableField<ApiForecast>()
-    val summary = ObservableField<List<ApiList>>()
     val listOfForecasts = arrayListOf<ForecastModel>()
+
     val loading = ObservableBoolean(false)
     var navigator: MainInterface? = null
     var timeInfoUpdate = ObservableField<String>()
@@ -73,13 +79,22 @@ class MainViewModel @Inject constructor(
                             ) {
                                 response.body()?.let {
 
-                                    summaryDetails.set(it)
                                     minTemp.set(it.list?.get(0)?.main?.tempMin?.toInt())
                                     maxTemp.set(it.list?.get(0)?.main?.tempMax?.toInt())
-                                    summary.set(it.list)
 
                                     it.list?.forEach { apiList ->
 
+                                        //detailed forecast
+                                        listOfDetailedForecasts.add(
+                                            DetailedForecastModel(
+                                                null,
+                                                apiList.weather?.get(0)?.main,
+                                                apiList.dtTxt,
+                                                apiList.main?.temp?.toInt()
+                                            )
+                                        )
+
+                                        //summarized forecast
                                         if (listOfForecasts.isEmpty()) {
                                             listOfForecasts.add(
                                                 ForecastModel(
@@ -120,7 +135,11 @@ class MainViewModel @Inject constructor(
                                 }
 
                                 forecasts.set(listOfForecasts)
-                                navigator?.onForecastSuccess(forecasts.get())
+                                detailedForecasts.set(listOfDetailedForecasts)
+                                navigator?.onForecastSuccess(
+                                    forecasts.get(),
+                                    detailedForecasts.get()
+                                )
                                 loading.set(false)
                             }
 
@@ -135,6 +154,7 @@ class MainViewModel @Inject constructor(
         } else {
             // no internet connection
             selectForecastLocalDB()
+            selectDetailedForecastsLocalDB()
         }
 
     }
@@ -155,7 +175,21 @@ class MainViewModel @Inject constructor(
                 navigator?.onInsertForecastSuccess()
             },
             {
-                navigator?.onInsertForecastSError(it)
+                navigator?.onInsertForecastError(it)
+            }
+        )
+
+    }
+
+    private fun insertDetailedForecast(detailedForecast: DetailedForecastEntity) {
+        detailedForecastRepository.insertDetailedForecast(
+            detailedForecast
+        ).subscribe(
+            {
+                navigator?.onInsertDetailedForecastSuccess()
+            },
+            {
+                navigator?.onInsertDetailedForecastError()
             }
         )
 
@@ -188,6 +222,31 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    private fun selectDetailedForecastsLocalDB() {
+        loading.set(true)
+        detailedForecastRepository.selectDetailedForeCast().subscribe(
+            {
+                it.forEach {
+                    listOfDetailedForecasts.add(
+                        DetailedForecastModel(
+                            it.id,
+                            it.status,
+                            it.dateText,
+                            it.temp
+                        )
+                    )
+                }
+                detailedForecasts.set(listOfDetailedForecasts)
+                loading.set(false)
+            },
+            {
+                // Tell user to check internet connection
+                loading.set(false)
+                navigator?.onError(it)
+            }
+        )
+    }
+
     fun deleteAllForecast(forecasts: List<ForecastModel>?) {
         forecastRepository.deleteAllForeCast().subscribe(
             {
@@ -210,6 +269,27 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun deleteDetailedForecasts(detailedForecasts: List<DetailedForecastModel>?) {
+        detailedForecastRepository.deleteAllDetailedForeCast().subscribe(
+            {
+                detailedForecasts?.forEach {
+                    insertDetailedForecast(
+                        DetailedForecastEntity(
+                            null,
+                            it.weatherStatus,
+                            it.dtTxt,
+                            it.temp
+                        )
+                    )
+                }
+
+            },
+            {
+                navigator?.onError(it)
+            }
+        )
+    }
+
     fun deleteWeather(currentWeather: ApiCurrent?) {
         weatherRepository.deleteAllWeather().subscribe(
             {
@@ -220,7 +300,6 @@ class MainViewModel @Inject constructor(
             }
         )
     }
-
 
     private fun insertWeather(currentWeather: ApiCurrent?) {
         weatherRepository.insertWeather(

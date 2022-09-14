@@ -16,7 +16,7 @@ import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.db.entity.ForecastEntity
-import com.example.weatherapp.db.entity.WeatherEntity
+import com.example.weatherapp.models.DetailedForecastModel
 import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.viewModel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -113,7 +113,13 @@ class MainActivity : AppCompatActivity(), MainInterface {
     override fun onInsertForecastSuccess() {
     }
 
-    override fun onInsertForecastSError(it: Throwable) {
+    override fun onInsertDetailedForecastSuccess() {
+    }
+
+    override fun onInsertDetailedForecastError() {
+    }
+
+    override fun onInsertForecastError(it: Throwable) {
     }
 
     override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?) {
@@ -131,8 +137,12 @@ class MainActivity : AppCompatActivity(), MainInterface {
         ).show()
     }
 
-    override fun onForecastSuccess(forecasts: List<ForecastModel>?) {
+    override fun onForecastSuccess(
+        forecasts: List<ForecastModel>?,
+        detailedForecasts: List<DetailedForecastModel>?
+    ) {
         viewModel.deleteAllForecast(forecasts)
+        viewModel.deleteDetailedForecasts(detailedForecasts)
     }
 
     override fun onRequestPermissionsResult(
@@ -219,9 +229,14 @@ class MainActivity : AppCompatActivity(), MainInterface {
 interface MainInterface {
     fun onSuccess(status: String?)
     fun onInsertForecastSuccess()
-    fun onInsertForecastSError(it: Throwable)
+    fun onInsertDetailedForecastSuccess()
+    fun onInsertDetailedForecastError()
+    fun onInsertForecastError(it: Throwable)
     fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?)
     fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>)
     fun onError(t: Throwable)
-    fun onForecastSuccess(forecasts: List<ForecastModel>?)
+    fun onForecastSuccess(
+        forecasts: List<ForecastModel>?,
+        detailedForecasts: List<DetailedForecastModel>?
+    )
 }

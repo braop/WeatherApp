@@ -6,8 +6,8 @@
         <import type="java.text.NumberFormat" />
 
         <variable
-            name="summary"
-            type="com.example.weatherapp.api.response.ApiList" />
+            name="forecastDetails"
+            type="com.example.weatherapp.models.DetailedForecastModel" />
     </data>
 
     <LinearLayout
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bariol_bold"
-            android:text='@{NumberFormat.getIntegerInstance().format(summary.main.temp)+ "\u00B0"}'
+            android:text='@{NumberFormat.getIntegerInstance().format(forecastDetails.temp)+ "\u00B0"}'
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/text_s" />
