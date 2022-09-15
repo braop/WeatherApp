@@ -351,6 +351,7 @@ class MainViewModel @Inject constructor(
                                     currentTemp.set(it.main?.temp?.toInt())
                                     feelsLike.set(it.main?.feelsLike?.toInt().toString())
                                     generateStatus(it.weather?.get(0)?.main)
+
                                     navigator?.onSuccess(it.weather?.get(0)?.main)
                                 }
                                 loading.set(false)

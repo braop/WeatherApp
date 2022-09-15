@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.LocationActivity">
 
     <data>
 
         <import type="android.view.View" />
 
-        <import type="java.text.NumberFormat" />
-
         <variable
             name="viewModel"
-            type="com.example.weatherapp.viewModel.MainViewModel" />
+            type="com.example.weatherapp.viewModel.LocationViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}" />
 
     </RelativeLayout>
 </layout>

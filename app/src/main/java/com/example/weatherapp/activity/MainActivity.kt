@@ -31,6 +31,9 @@ class MainActivity : AppCompatActivity(), MainInterface {
     lateinit var viewModel: MainViewModel
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private var latitude: Double? = null
+    private var longitude: Double? = null
+
 
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -59,7 +62,14 @@ class MainActivity : AppCompatActivity(), MainInterface {
         }
 
         binding.location.setOnClickListener {
-            startActivity(Intent(this, LocationActivity::class.java))
+
+            val bundle = Bundle()
+            bundle.putDouble("latitude", latitude!!)
+            bundle.putDouble("longitude", longitude!!)
+
+            val intent = Intent(this@MainActivity, LocationActivity::class.java)
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
 
     }
@@ -129,6 +139,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
     override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?) {
         viewModel.deleteWeather(currentWeather)
+        latitude = currentWeather?.coord?.lat
+        longitude = currentWeather?.coord?.lon
     }
 
     override fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>) {
