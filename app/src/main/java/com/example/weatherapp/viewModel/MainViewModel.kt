@@ -369,6 +369,7 @@ class MainViewModel @Inject constructor(
 
         } else {
             // no internet connection
+            online.set(false)
             selectWeatherLocalDB()
         }
     }
@@ -400,6 +401,7 @@ class MainViewModel @Inject constructor(
         minTemp.set(null)
         maxTemp.set(null)
         forecasts.set(null)
+        online.set(false)
         navigator = null
     }
 

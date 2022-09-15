@@ -62,14 +62,16 @@ class MainActivity : AppCompatActivity(), MainInterface {
         }
 
         binding.location.setOnClickListener {
-
-            val bundle = Bundle()
-            bundle.putDouble("latitude", latitude!!)
-            bundle.putDouble("longitude", longitude!!)
-
-            val intent = Intent(this@MainActivity, LocationActivity::class.java)
-            intent.putExtras(bundle)
-            startActivity(intent)
+            if ((application as CustomApplication).isNetworkConnected(this)) {
+                val bundle = Bundle()
+                bundle.putDouble("latitude", latitude!!)
+                bundle.putDouble("longitude", longitude!!)
+                val intent = Intent(this@MainActivity, LocationActivity::class.java)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Internet Connection is Required", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

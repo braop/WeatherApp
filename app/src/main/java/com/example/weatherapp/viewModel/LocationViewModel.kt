@@ -69,6 +69,7 @@ class LocationViewModel @Inject constructor(
             }
         } else {
             // no internet connection
+            navigator?.onNoInternet()
         }
 
     }
@@ -101,6 +102,7 @@ class LocationViewModel @Inject constructor(
             }
         } else {
             // no internet connection
+            navigator?.onNoInternet()
         }
 
     }

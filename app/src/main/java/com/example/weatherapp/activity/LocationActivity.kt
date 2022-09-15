@@ -1,6 +1,7 @@
 package com.example.weatherapp.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.weatherapp.CustomApplication
@@ -75,9 +76,14 @@ class LocationActivity : AppCompatActivity(), LocationNavigator, OnMapReadyCallb
 
     override fun onError() {
     }
+
+    override fun onNoInternet() {
+        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
+    }
 }
 
 interface LocationNavigator {
     fun onSuccess()
     fun onError()
+    fun onNoInternet()
 }
