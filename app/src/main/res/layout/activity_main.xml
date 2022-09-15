@@ -269,6 +269,30 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_ss" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.online == true ? View.GONE : View.VISIBLE}">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/margin_s"
+                        android:src="@drawable/circler_image" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/bariol_regular"
+                        android:layout_gravity="center"
+                        android:text="@string/you_re_offline"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_s" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
             <RelativeLayout
@@ -278,26 +302,15 @@
                 android:padding="@dimen/margin_l">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/bariol_regular"
-                    android:text="@string/you_re_offline"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_s"
-                    android:visibility="@{viewModel.online == true ? View.GONE : View.VISIBLE}" />
-
-                <TextView
                     android:id="@+id/location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/bariol_regular"
-                    android:padding="@dimen/margin_l"
+                    android:padding="@dimen/margin_m"
                     android:text="@string/see_your_location"
                     android:textAlignment="textEnd"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text_s"
-                    android:visibility="@{viewModel.online == true ? View.VISIBLE : View.VISIBLE}" />
+                    android:textSize="@dimen/text_s" />
 
             </RelativeLayout>
 
