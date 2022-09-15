@@ -62,6 +62,10 @@ class LocationActivity : AppCompatActivity(), LocationNavigator, OnMapReadyCallb
                 cameraPosition
             )
         )
+
+        binding.backButton.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onSuccess() {
