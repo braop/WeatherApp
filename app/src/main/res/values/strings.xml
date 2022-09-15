@@ -6,5 +6,6 @@
     <string name="main_header_image">main header image</string>
     <string name="forecast_prediction">What to expect in the coming hours</string>
     <string name="you_re_offline"><u>You\'re offline!</u></string>
+    <string name="see_your_location"><u>See you location</u></string>
 
 </resources>

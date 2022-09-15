@@ -1,6 +1,7 @@
 package com.example.weatherapp.activity
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -55,6 +56,10 @@ class MainActivity : AppCompatActivity(), MainInterface {
             layoutManager =
                 LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = SummaryRecyclerviewAdapter()
+        }
+
+        binding.location.setOnClickListener {
+            startActivity(Intent(this, LocationActivity::class.java))
         }
 
     }

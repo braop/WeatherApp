@@ -271,23 +271,35 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin_l"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:padding="@dimen/margin_l">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/bariol_regular"
                     android:text="@string/you_re_offline"
-                    android:textColor="@color/white"
                     android:textAlignment="textEnd"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/text_s"
                     android:visibility="@{viewModel.online == true ? View.GONE : View.VISIBLE}" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bariol_regular"
+                    android:padding="@dimen/margin_l"
+                    android:text="@string/see_your_location"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_s"
+                    android:visibility="@{viewModel.online == true ? View.VISIBLE : View.VISIBLE}" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>
