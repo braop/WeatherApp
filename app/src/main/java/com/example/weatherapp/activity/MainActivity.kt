@@ -19,6 +19,7 @@ import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.db.entity.ForecastEntity
 import com.example.weatherapp.models.DetailedForecastModel
 import com.example.weatherapp.models.ForecastModel
+import com.example.weatherapp.util.Constants
 import com.example.weatherapp.viewModel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -63,14 +64,21 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
         binding.location.setOnClickListener {
             if ((application as CustomApplication).isNetworkConnected(this)) {
-                val bundle = Bundle()
-                bundle.putDouble("latitude", latitude!!)
-                bundle.putDouble("longitude", longitude!!)
-                val intent = Intent(this@MainActivity, LocationActivity::class.java)
-                intent.putExtras(bundle)
-                startActivity(intent)
+
+                if (latitude == null) {
+                    Toast.makeText(this, getString(R.string.app_error_restart), Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    val bundle = Bundle()
+                    bundle.putDouble("latitude", latitude!!)
+                    bundle.putDouble("longitude", longitude!!)
+                    val intent = Intent(this@MainActivity, LocationActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
             } else {
-                Toast.makeText(this, "Internet Connection is Required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.internet_required), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -79,7 +87,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
     override fun onSuccess(status: String?) {
 
         when (status) {
-            "Clouds" -> {
+            Constants.CLOUDS -> {
                 binding.headerImage.setImageResource(R.drawable.forest_cloudy)
                 binding.mainLayout.setBackgroundColor(
                     ContextCompat.getColor(
@@ -94,7 +102,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
                     )
                 )
             }
-            "Rain" -> {
+            Constants.RAIN -> {
                 binding.headerImage.setImageResource(R.drawable.forest_rainy)
                 binding.mainLayout.setBackgroundColor(
                     ContextCompat.getColor(
@@ -109,7 +117,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
                     )
                 )
             }
-            "Clear" -> {
+            Constants.CLEAR -> {
                 binding.headerImage.setImageResource(R.drawable.forest_sunny)
                 binding.mainLayout.setBackgroundColor(
                     ContextCompat.getColor(
@@ -151,7 +159,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
     override fun onError(t: Throwable) {
         Toast.makeText(
             this,
-            "There was an Error, Please restart the weather app",
+            getString(R.string.app_error_restart),
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -176,6 +184,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
                     getLastKnownLocation()
                 } else {
                     // permission not granted
+                    viewModel.setPermissionStatus(true)
                 }
             }
             else -> {

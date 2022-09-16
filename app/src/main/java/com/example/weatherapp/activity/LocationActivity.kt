@@ -78,7 +78,7 @@ class LocationActivity : AppCompatActivity(), LocationNavigator, OnMapReadyCallb
     }
 
     override fun onNoInternet() {
-        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.internet_required), Toast.LENGTH_SHORT).show()
     }
 }
 

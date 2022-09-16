@@ -8,5 +8,8 @@
     <string name="you_re_offline"><u>You\'re offline!</u></string>
     <string name="see_your_location"><u>See your location</u></string>
     <string name="google_maps_key">AIzaSyA9cms_dxhTLhKbGvwwEr3zf0i0BHGGFwY</string>
+    <string name="internet_required">"Internet Connection is Required"</string>
+    <string name="app_error_restart">There was an Error, Please restart the weather app</string>
+    <string name="no_permission_description">This application is location based. Please restart the application and remember to allow location permission</string>
 
 </resources>

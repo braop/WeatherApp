@@ -28,7 +28,6 @@ class LocationViewModel @Inject constructor(
     val longObservable = ObservableField<Double>()
     val city = ObservableField<ApiCity>()
     val loading = ObservableBoolean(false)
-    val online = ObservableField(false)
 
     var navigator: LocationNavigator? = null
 
@@ -40,7 +39,6 @@ class LocationViewModel @Inject constructor(
     private fun getForecast(latitude: Double?, longitude: Double?) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
-            online.set(true)
             latitude?.let { lat ->
                 longitude?.let { long ->
                     weatherClient.getWeather(lat, long)
@@ -77,7 +75,6 @@ class LocationViewModel @Inject constructor(
     private fun getCityInfo(latitude: Double?, longitude: Double?) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
-            online.set(true)
             latitude?.let { lat ->
                 longitude?.let { long ->
                     forecastClient.getForecast(lat, long)

@@ -19,6 +19,7 @@ import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.repository.DetailedForecastRepository
 import com.example.weatherapp.repository.ForecastRepository
 import com.example.weatherapp.repository.WeatherRepository
+import com.example.weatherapp.util.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,6 +59,7 @@ class MainViewModel @Inject constructor(
 
     val loading = ObservableBoolean(false)
     val online = ObservableField(false)
+    val noPermission = ObservableField(false)
 
     var navigator: MainInterface? = null
     var timeInfoUpdate = ObservableField<String>()
@@ -393,6 +395,10 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun setPermissionStatus(boolean: Boolean) {
+        noPermission.set(boolean)
+    }
+
     fun destroy() {
         currentWeather.set(null)
         currentTemp.set(null)
@@ -403,6 +409,7 @@ class MainViewModel @Inject constructor(
         forecasts.set(null)
         online.set(false)
         city.set(null)
+        noPermission.set(false)
         navigator = null
     }
 
@@ -411,15 +418,15 @@ class MainViewModel @Inject constructor(
         val formatted = current?.format(formatter)
 
         when (status) {
-            "Clouds" -> {
+            Constants.CLOUDS -> {
                 currentStatus.set("Cloudy")
                 timeInfoUpdate.set(formatted.toString() + ", Mostly Cloudy")
             }
-            "Rain" -> {
+            Constants.RAIN -> {
                 currentStatus.set("Rainy")
                 timeInfoUpdate.set(formatted.toString() + ", Mostly Rainy")
             }
-            "Clear" -> {
+            Constants.CLEAR -> {
                 currentStatus.set("Sunny")
                 timeInfoUpdate.set(formatted.toString() + ", Mostly Clear Sky")
             }

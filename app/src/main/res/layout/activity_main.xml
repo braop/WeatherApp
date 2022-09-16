@@ -285,8 +285,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/bariol_regular"
                         android:layout_gravity="center"
+                        android:fontFamily="@font/bariol_regular"
                         android:text="@string/you_re_offline"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_s" />
@@ -316,6 +316,17 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin_ll"
+            android:fontFamily="@font/bariol_regular"
+            android:text="@string/no_permission_description"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_l"
+            android:visibility="@{viewModel.noPermission == true ? View.VISIBLE : View.GONE }" />
 
 
     </RelativeLayout>
