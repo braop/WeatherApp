@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_s"
                 android:fontFamily="@font/bariol_regular"
-                android:text='@{viewModel.city.name + " Area Population is:"}'
+                android:text='@{viewModel.city.name}'
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_m" />
 
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bariol_regular"
-                android:text='@{NumberFormat.getNumberInstance().format(viewModel.city.population)}'
+                android:text='@{NumberFormat.getNumberInstance().format(viewModel.latObservable) +", "+ NumberFormat.getNumberInstance().format(viewModel.latObservable) }'
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_m" />
         </LinearLayout>
