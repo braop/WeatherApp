@@ -77,7 +77,7 @@ class MainViewModel @Inject constructor(
             online.set(true)
             latitude?.let { lat ->
                 longitude?.let { long ->
-                    forecastClient.getForecast(25.2048, 55.2708)
+                    forecastClient.getForecast(lat, long)
                         .enqueue(object : Callback<ApiForecast> {
                             override fun onResponse(
                                 call: Call<ApiForecast>,
@@ -340,7 +340,7 @@ class MainViewModel @Inject constructor(
             loading.set(true)
             latitude?.let { lat ->
                 longitude?.let { long ->
-                    weatherClient.getWeather(25.2048, 55.2708)
+                    weatherClient.getWeather(lat, long)
                         .enqueue(object : Callback<ApiCurrent> {
                             override fun onResponse(
                                 call: Call<ApiCurrent>,
