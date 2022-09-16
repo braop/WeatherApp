@@ -203,7 +203,7 @@ class MainViewModel @Inject constructor(
 
     }
 
-    private fun selectForecastLocalDB() {
+    fun selectForecastLocalDB() {
         loading.set(true)
         forecastRepository.selectForeCast().subscribe(
             {
@@ -230,7 +230,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun selectDetailedForecastsLocalDB() {
+    fun selectDetailedForecastsLocalDB() {
         loading.set(true)
         detailedForecastRepository.selectDetailedForeCast().subscribe(
             {
@@ -374,7 +374,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun selectWeatherLocalDB() {
+    fun selectWeatherLocalDB() {
         loading.set(true)
         weatherRepository.selectWeather().subscribe(
             {
