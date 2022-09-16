@@ -21,6 +21,43 @@
         android:overScrollMode="never">
 
         <RelativeLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_l"
+            android:background="@color/white"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/search_text"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@null"
+                android:hint="@string/search_hint"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="@dimen/margin_s"
+                android:textSize="@dimen/text_m"
+                tools:ignore="RtlSymmetry" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_s"
+                    android:src="@drawable/icn_search"
+                    app:tint="@color/black" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -238,8 +275,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
-            android:elevation="1dp"
             android:baselineAligned="false"
+            android:elevation="1dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
