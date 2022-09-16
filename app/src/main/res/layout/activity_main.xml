@@ -20,47 +20,12 @@
         android:layout_height="match_parent"
         android:overScrollMode="never">
 
-        <RelativeLayout
-            android:id="@+id/search_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_l"
-            android:background="@color/white"
-            android:gravity="center">
-
-            <EditText
-                android:id="@+id/search_text"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:background="@null"
-                android:hint="@string/search_hint"
-                android:inputType="text"
-                android:maxLines="1"
-                android:paddingStart="@dimen/margin_s"
-                android:textSize="@dimen/text_m"
-                tools:ignore="RtlSymmetry" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_s"
-                    android:src="@drawable/icn_search"
-                    app:tint="@color/black" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar_layout"
             android:layout_above="@+id/bottom_layout"
             android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
 
@@ -366,6 +331,58 @@
             android:textSize="@dimen/text_l"
             android:visibility="@{viewModel.noPermission == true ? View.VISIBLE : View.GONE }" />
 
+        <RelativeLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentTop="true" />
+
+            <RelativeLayout
+                android:id="@+id/search_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/margin_l"
+                android:layout_marginEnd="@dimen/margin_l"
+                android:paddingStart="@dimen/margin_m"
+                android:background="@drawable/search_bck_drawable"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/search_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@null"
+                    android:fontFamily="@font/bariol_regular"
+                    android:hint="@string/search_hint"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_l"
+                    tools:ignore="RtlSymmetry" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/margin_s"
+                        android:src="@drawable/icn_search"
+                        app:tint="@color/black" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

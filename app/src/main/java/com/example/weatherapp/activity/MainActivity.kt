@@ -3,6 +3,7 @@ package com.example.weatherapp.activity
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -82,6 +83,14 @@ class MainActivity : AppCompatActivity(), MainInterface {
             }
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = ContextCompat.getColor(
+                this,
+                R.color.color_rainy
+            )
+        }
+
+
     }
 
     override fun onSuccess(status: String?) {
@@ -96,6 +105,20 @@ class MainActivity : AppCompatActivity(), MainInterface {
                     )
                 )
                 binding.bottomLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_cloudy
+                    )
+                )
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.statusBarColor = ContextCompat.getColor(
+                        this,
+                        R.color.color_cloudy
+                    )
+                }
+
+                binding.toolbarLayout.setBackgroundColor(
                     ContextCompat.getColor(
                         this,
                         R.color.color_cloudy
@@ -116,6 +139,19 @@ class MainActivity : AppCompatActivity(), MainInterface {
                         R.color.color_rainy
                     )
                 )
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.statusBarColor = ContextCompat.getColor(
+                        this,
+                        R.color.color_rainy
+                    )
+                }
+                binding.toolbarLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_rainy
+                    )
+                )
             }
             Constants.CLEAR -> {
                 binding.headerImage.setImageResource(R.drawable.forest_sunny)
@@ -131,6 +167,20 @@ class MainActivity : AppCompatActivity(), MainInterface {
                         R.color.color_sunny
                     )
                 )
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.statusBarColor = ContextCompat.getColor(
+                        this,
+                        R.color.color_sunny
+                    )
+
+                    binding.toolbarLayout.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.color_sunny
+                        )
+                    )
+                }
             }
         }
     }
