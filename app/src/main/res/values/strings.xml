@@ -11,6 +11,6 @@
     <string name="internet_required">"Internet Connection is Required"</string>
     <string name="app_error_restart">There was an Internet Connectivity Error, Please restart the weather app</string>
     <string name="no_permission_description">This application is location based. Please restart the application and remember to allow location permission</string>
-    <string name="search_hint">search place</string>
+    <string name="search_hint">Type name of the place here</string>
 
 </resources>

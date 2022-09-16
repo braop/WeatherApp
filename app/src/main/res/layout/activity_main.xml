@@ -349,7 +349,8 @@
                 android:layout_centerInParent="true"
                 android:layout_marginStart="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_l"
-                android:paddingStart="@dimen/margin_m"
+                android:paddingEnd="@dimen/margin_l"
+                android:paddingStart="@dimen/margin_l"
                 android:background="@drawable/search_bck_drawable"
                 android:gravity="center">
 
