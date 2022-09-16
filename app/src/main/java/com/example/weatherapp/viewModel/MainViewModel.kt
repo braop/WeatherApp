@@ -115,7 +115,7 @@ class MainViewModel @Inject constructor(
                                             )
 
                                         } else {
-                                            var count = 0;
+                                            var count = 0
                                             listOfForecasts.forEach {
                                                 if (it.dateText.equals(
                                                         apiList.dtTxt?.trim()?.substring(0, 10)
