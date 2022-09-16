@@ -12,7 +12,7 @@ data class ApiCity(
     var timezone: Int?,
     var sunrise: Int?,
     var sunset: Int?
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
@@ -22,8 +22,7 @@ data class ApiCity(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(id)

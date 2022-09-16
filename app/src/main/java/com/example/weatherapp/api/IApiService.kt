@@ -1,6 +1,5 @@
 package com.example.weatherapp.api
 
-import android.content.Context
 import com.example.weatherapp.CustomInterceptor
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
@@ -15,7 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
-class ApiService(private val context: Context) {
+class ApiService {
 
     val service: IApiService = create(IApiService::class.java)
 
