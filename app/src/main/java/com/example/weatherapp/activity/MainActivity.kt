@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
                 viewModel.getWeatherApi(location.latitude, location.longitude)
                 viewModel.getForecast(location.latitude, location.longitude)
             } else {
-                Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
                 viewModel.selectWeatherLocalDB()
                 viewModel.selectDetailedForecastsLocalDB()
                 viewModel.selectForecastLocalDB()
