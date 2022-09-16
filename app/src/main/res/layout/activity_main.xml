@@ -348,9 +348,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginStart="@dimen/margin_l"
-                android:layout_marginEnd="@dimen/margin_l"
                 android:paddingEnd="@dimen/margin_l"
-                android:paddingStart="@dimen/margin_l"
+                android:layout_marginEnd="@dimen/margin_l"
                 android:background="@drawable/search_bck_drawable"
                 android:gravity="center">
 
@@ -359,14 +358,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="@null"
+                    android:layout_marginEnd="@dimen/margin_ll"
                     android:fontFamily="@font/bariol_regular"
                     android:hint="@string/search_hint"
                     android:inputType="text"
                     android:maxLines="1"
+                    android:paddingStart="@dimen/margin_l"
                     android:textSize="@dimen/text_l"
-                    tools:ignore="RtlSymmetry" />
+                    tools:ignore="RtlSymmetry"
+
+                    />
 
                 <RelativeLayout
+                    android:id="@+id/search_icon_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
