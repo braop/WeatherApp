@@ -280,7 +280,7 @@
                         android:layout_height="10dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/margin_s"
-                        android:src="@drawable/circler_image" />
+                        android:src="@drawable/internet_off_circle" />
 
                     <TextView
                         android:layout_width="wrap_content"
