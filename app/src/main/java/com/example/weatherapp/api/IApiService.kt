@@ -18,7 +18,7 @@ class ApiService {
 
     val service: IApiService = create(IApiService::class.java)
 
-    lateinit var retrofit: Retrofit
+    private lateinit var retrofit: Retrofit
 
     private fun <S> create(serviceClass: Class<S>): S {
         val gson = GsonBuilder()

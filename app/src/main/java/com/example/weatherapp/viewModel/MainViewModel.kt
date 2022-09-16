@@ -116,8 +116,8 @@ class MainViewModel @Inject constructor(
 
                                         } else {
                                             var count = 0
-                                            listOfForecasts.forEach {
-                                                if (it.dateText.equals(
+                                            listOfForecasts.forEach { forecastModel ->
+                                                if (forecastModel.dateText.equals(
                                                         apiList.dtTxt?.trim()?.substring(0, 10)
                                                     )
                                                 ) {
@@ -209,13 +209,13 @@ class MainViewModel @Inject constructor(
         loading.set(true)
         forecastRepository.selectForeCast().subscribe(
             {
-                it.forEach {
+                it.forEach { forecastEntity ->
                     listOfForecasts.add(
                         ForecastModel(
-                            it.dateText,
-                            it.dayName,
-                            it.temp,
-                            it.status
+                            forecastEntity.dateText,
+                            forecastEntity.dayName,
+                            forecastEntity.temp,
+                            forecastEntity.status
                         )
                     )
                 }
@@ -236,13 +236,13 @@ class MainViewModel @Inject constructor(
         loading.set(true)
         detailedForecastRepository.selectDetailedForeCast().subscribe(
             {
-                it.forEach {
+                it.forEach { detailedForecastEntity ->
                     listOfDetailedForecasts.add(
                         DetailedForecastModel(
-                            it.id,
-                            it.status,
-                            it.dateText,
-                            it.temp
+                            detailedForecastEntity.id,
+                            detailedForecastEntity.status,
+                            detailedForecastEntity.dateText,
+                            detailedForecastEntity.temp
                         )
                     )
                 }
