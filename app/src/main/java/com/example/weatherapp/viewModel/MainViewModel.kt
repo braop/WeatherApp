@@ -402,6 +402,7 @@ class MainViewModel @Inject constructor(
         maxTemp.set(null)
         forecasts.set(null)
         online.set(false)
+        city.set(null)
         navigator = null
     }
 
