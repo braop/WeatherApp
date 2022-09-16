@@ -239,6 +239,7 @@
             android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
             android:elevation="1dp"
+            android:baselineAligned="false"
             android:gravity="center"
             android:orientation="horizontal"
             android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">

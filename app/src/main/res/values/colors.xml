@@ -16,6 +16,6 @@
 
     <color name="color_sunny">#47AB2F</color>
     <color name="color_bottom_sunny">#435f67</color>
-    <color name="color_offline">#ff0000 </color>
+    <color name="color_offline">#ff0000</color>
 
 </resources>
