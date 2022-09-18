@@ -189,7 +189,7 @@ class MainViewModel @Inject constructor(
         return DateFormatSymbols().weekdays[cal[Calendar.DAY_OF_WEEK]]
     }
 
-    private fun insertForecast(forecasts: ForecastEntity) {
+    private fun insertForecastToDB(forecasts: ForecastEntity) {
         forecastRepository.insertForecast(
             forecasts
         ).subscribe(
@@ -203,7 +203,7 @@ class MainViewModel @Inject constructor(
 
     }
 
-    private fun insertDetailedForecast(detailedForecast: DetailedForecastEntity) {
+    private fun insertDetailedForecastToDB(detailedForecast: DetailedForecastEntity) {
         detailedForecastRepository.insertDetailedForecast(
             detailedForecast
         ).subscribe(
@@ -269,11 +269,11 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun deleteAllForecast(forecasts: List<ForecastModel>?) {
+    fun deleteAllForecastFromDB(forecasts: List<ForecastModel>?) {
         forecastRepository.deleteAllForeCast().subscribe(
             {
                 forecasts?.forEach {
-                    insertForecast(
+                    insertForecastToDB(
                         ForecastEntity(
                             null,
                             it.dateText,
@@ -291,11 +291,11 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun deleteDetailedForecasts(detailedForecasts: List<DetailedForecastModel>?) {
+    fun deleteDetailedForecastsFromDB(detailedForecasts: List<DetailedForecastModel>?) {
         detailedForecastRepository.deleteAllDetailedForeCast().subscribe(
             {
                 detailedForecasts?.forEach {
-                    insertDetailedForecast(
+                    insertDetailedForecastToDB(
                         DetailedForecastEntity(
                             null,
                             it.weatherStatus,
@@ -312,10 +312,10 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun deleteWeather(currentWeather: ApiCurrent?) {
+    fun deleteWeatherFromDB(currentWeather: ApiCurrent?) {
         weatherRepository.deleteAllWeather().subscribe(
             {
-                insertWeather(currentWeather)
+                insertWeatherToDB(currentWeather)
             },
             {
 
@@ -323,7 +323,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun insertWeather(currentWeather: ApiCurrent?) {
+    private fun insertWeatherToDB(currentWeather: ApiCurrent?) {
         weatherRepository.insertWeather(
             WeatherEntity(
                 null,
@@ -366,7 +366,11 @@ class MainViewModel @Inject constructor(
                                     maxTemp.set(it.main?.tempMax?.toInt())
                                     currentTemp.set(it.main?.temp?.toInt())
                                     feelsLike.set(it.main?.feelsLike?.toInt().toString())
-                                    generateStatus(it.weather?.get(0)?.main)
+                                    generateStatus(
+                                        it.weather?.get(0)?.main,
+                                        it.weather?.get(0)?.description
+                                    )
+
 
                                     navigator?.onSuccess(it.weather?.get(0)?.main)
                                 }
@@ -386,11 +390,11 @@ class MainViewModel @Inject constructor(
         } else {
             // no internet connection
             online.set(false)
-            selectWeatherLocalDB()
+            selectWeatherFromDB()
         }
     }
 
-    fun selectWeatherLocalDB() {
+    fun selectWeatherFromDB() {
         loading.set(true)
         weatherRepository.selectWeather().subscribe(
             {
@@ -399,7 +403,7 @@ class MainViewModel @Inject constructor(
                 minTemp.set(it.minTemp)
                 maxTemp.set(it.maxTemp)
                 city.set(it.name)
-                generateStatus(it.main)
+                generateStatus(it.main, it.description)
                 lastUpdatedAt.set(
                     "Last updated at: " + createdAt.parse(it.createdAt).toString().trim()
                         .substring(0, 19)
@@ -431,22 +435,22 @@ class MainViewModel @Inject constructor(
         navigator = null
     }
 
-    private fun generateStatus(status: String?) {
+    private fun generateStatus(status: String?, description: String?) {
 
         val formatted = current?.format(formatter)
 
         when (status) {
             Constants.CLOUDS -> {
-                currentStatus.set("Cloudy")
-                timeInfoUpdate.set(formatted.toString() + ", Mostly Cloudy")
+                currentStatus.set(Constants.CLOUDY)
+                timeInfoUpdate.set(formatted.toString() + ", " + description)
             }
             Constants.RAIN -> {
-                currentStatus.set("Rainy")
-                timeInfoUpdate.set(formatted.toString() + ", Mostly Rainy")
+                currentStatus.set(Constants.RAINY)
+                timeInfoUpdate.set(formatted.toString() + ", " + description)
             }
             Constants.CLEAR -> {
-                currentStatus.set("Sunny")
-                timeInfoUpdate.set(formatted.toString() + ", Clear Sky")
+                currentStatus.set(Constants.SUNNY)
+                timeInfoUpdate.set(formatted.toString() + ", " + description)
             }
         }
     }

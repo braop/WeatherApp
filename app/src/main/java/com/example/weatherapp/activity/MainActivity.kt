@@ -13,8 +13,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
-import com.example.weatherapp.adapter.SummarisedForecastRecyclerviewAdapter
 import com.example.weatherapp.adapter.DetailedForecastRecyclerviewAdapter
+import com.example.weatherapp.adapter.SummarisedForecastRecyclerviewAdapter
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.db.entity.ForecastEntity
@@ -259,7 +259,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
     override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?, isSearch: Boolean) {
         if (!isSearch) {
-            viewModel.deleteWeather(currentWeather)
+            viewModel.deleteWeatherFromDB(currentWeather)
             latitude = currentWeather?.coord?.lat
             longitude = currentWeather?.coord?.lon
         }
@@ -285,8 +285,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
         summaryRecyclerviewAdapter.notifyDataSetChanged()
 
         if (!isSearch) {
-            viewModel.deleteAllForecast(forecasts)
-            viewModel.deleteDetailedForecasts(detailedForecasts)
+            viewModel.deleteAllForecastFromDB(forecasts)
+            viewModel.deleteDetailedForecastsFromDB(detailedForecasts)
         }
 
     }
@@ -332,7 +332,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
                 viewModel.getDetailedForecastFromApi(location.latitude, location.longitude, false)
             } else {
                 //Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
-                viewModel.selectWeatherLocalDB()
+                viewModel.selectWeatherFromDB()
                 viewModel.selectDetailedForecastsLocalDB()
                 viewModel.selectForecastLocalDB()
             }

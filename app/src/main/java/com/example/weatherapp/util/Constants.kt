@@ -9,5 +9,8 @@ class Constants {
         const val CLOUDS = "Clouds"
         const val RAIN = "Rain"
         const val CLEAR = "Clear"
+        const val CLOUDY = "Cloudy"
+        const val RAINY = "Rainy"
+        const val SUNNY = "Sunny"
     }
 }
