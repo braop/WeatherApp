@@ -13,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
-import com.example.weatherapp.adapter.ForecastRecyclerviewAdapter
+import com.example.weatherapp.adapter.SummarisedForecastRecyclerviewAdapter
 import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.databinding.ActivityMainBinding
@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity(), MainInterface {
     private var latitude: Double? = null
     private var longitude: Double? = null
 
+    private val forecastRecyclerviewAdapter = SummarisedForecastRecyclerviewAdapter()
+    private val summaryRecyclerviewAdapter = SummaryRecyclerviewAdapter()
+
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
@@ -55,18 +58,6 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         Places.initialize(applicationContext, Constants.PLACES_API)
-
-        binding.forecastRecyclerview.apply {
-            layoutManager =
-                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-            adapter = ForecastRecyclerviewAdapter()
-        }
-
-        binding.summaryRecyclerview.apply {
-            layoutManager =
-                LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = SummaryRecyclerviewAdapter()
-        }
 
         binding.location.setOnClickListener {
             if ((application as CustomApplication).isNetworkConnected(this)) {
@@ -89,7 +80,22 @@ class MainActivity : AppCompatActivity(), MainInterface {
         }
 
         getPlace()
+        showWeatherAndForecastData()
 
+    }
+
+    private fun showWeatherAndForecastData() {
+        binding.forecastRecyclerview.apply {
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            this.adapter = forecastRecyclerviewAdapter
+        }
+
+        binding.summaryRecyclerview.apply {
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = summaryRecyclerviewAdapter
+        }
     }
 
     private fun getPlace() {
@@ -118,6 +124,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
                 viewModel.getForecast(latlng?.latitude, latlng?.longitude, true)
                 viewModel.getWeatherApi(latlng?.latitude, latlng?.longitude, true)
+
 
             }
 
@@ -232,6 +239,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
     }
 
     override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?, isSearch: Boolean) {
+        forecastRecyclerviewAdapter.notifyDataSetChanged()
+        summaryRecyclerviewAdapter.notifyDataSetChanged()
         if (!isSearch) {
             viewModel.deleteWeather(currentWeather)
             latitude = currentWeather?.coord?.lat
@@ -253,9 +262,13 @@ class MainActivity : AppCompatActivity(), MainInterface {
     override fun onForecastSuccess(
         forecasts: List<ForecastModel>?,
         detailedForecasts: List<DetailedForecastModel>?,
-        search: Boolean
+        isSearch: Boolean
     ) {
-        if (!search) {
+
+        forecastRecyclerviewAdapter.notifyDataSetChanged()
+        summaryRecyclerviewAdapter.notifyDataSetChanged()
+
+        if (!isSearch) {
             viewModel.deleteAllForecast(forecasts)
             viewModel.deleteDetailedForecasts(detailedForecasts)
         }
@@ -359,6 +372,6 @@ interface MainInterface {
     fun onForecastSuccess(
         forecasts: List<ForecastModel>?,
         detailedForecasts: List<DetailedForecastModel>?,
-        search: Boolean
+        isSearch: Boolean
     )
 }

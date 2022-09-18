@@ -2,6 +2,7 @@ package com.example.weatherapp.viewModel
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
@@ -67,11 +68,19 @@ class MainViewModel @Inject constructor(
     private val current: LocalDateTime? = LocalDateTime.now()
     private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 
+    @SuppressLint("SimpleDateFormat")
+    private val createdAt = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
+    val lastUpdatedAt = ObservableField<String>()
+
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
     }
 
-    fun getForecast(latitude: Double?, longitude: Double?, search: Boolean) {
+    fun getForecast(latitude: Double?, longitude: Double?, isSearch: Boolean) {
+
+        Log.d("TAGSO", "onResponse: $latitude $longitude")
+
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
             online.set(true)
@@ -143,13 +152,12 @@ class MainViewModel @Inject constructor(
 
                                 forecasts.set(listOfForecasts)
                                 detailedForecasts.set(listOfDetailedForecasts)
+
                                 navigator?.onForecastSuccess(
                                     forecasts.get(),
                                     detailedForecasts.get(),
-                                    search
+                                    isSearch
                                 )
-
-
                                 loading.set(false)
                             }
 
@@ -322,7 +330,8 @@ class MainViewModel @Inject constructor(
                 currentWeather?.main?.tempMin?.toInt(),
                 currentWeather?.main?.temp?.toInt(),
                 currentWeather?.main?.feelsLike?.toInt(),
-                currentWeather?.name
+                currentWeather?.name,
+                createdAt.format(Date())
             )
         ).subscribe(
             {
@@ -388,6 +397,7 @@ class MainViewModel @Inject constructor(
                 maxTemp.set(it.maxTemp)
                 city.set(it.name)
                 generateStatus(it.main)
+                lastUpdatedAt.set("Last updated at: " + createdAt.parse(it.createdAt).toString().trim().substring(0,19))
                 loading.set(false)
                 navigator?.onSuccess(it.main)
             },

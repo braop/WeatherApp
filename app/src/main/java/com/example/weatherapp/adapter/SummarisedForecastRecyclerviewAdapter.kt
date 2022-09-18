@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ItemWeatherBinding
 import com.example.weatherapp.models.ForecastModel
+import com.example.weatherapp.util.Constants
 
-class ForecastRecyclerviewAdapter :
-    RecyclerView.Adapter<ForecastRecyclerviewAdapter.BindingHolder>() {
+
+class SummarisedForecastRecyclerviewAdapter :
+    RecyclerView.Adapter<SummarisedForecastRecyclerviewAdapter.BindingHolder>() {
 
     var forecasts: List<ForecastModel>? = null
 
@@ -23,13 +25,13 @@ class ForecastRecyclerviewAdapter :
         holder.binding.forecast = forecast
 
         when (forecast?.status) {
-            "Clouds" -> {
+            Constants.CLOUDS -> {
                 holder.binding.icon.setImageResource(R.drawable.cloud)
             }
-            "Rain" -> {
+            Constants.RAIN -> {
                 holder.binding.icon.setImageResource(R.drawable.rain)
             }
-            "Clear" -> {
+            Constants.CLEAR -> {
                 holder.binding.icon.setImageResource(R.drawable.sun)
             }
         }
