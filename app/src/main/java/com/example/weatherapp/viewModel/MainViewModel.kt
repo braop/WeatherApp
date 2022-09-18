@@ -77,12 +77,14 @@ class MainViewModel @Inject constructor(
     }
 
     fun getDetailedForecastFromApi(latitude: Double?, longitude: Double?, isSearch: Boolean) {
-        listOfDetailedForecasts.clear()
-        listOfSummariedForecasts.clear()
-        summarisedforecasts.set(null)
-        detailedForecasts.set(null)
 
         if ((context as CustomApplication).isNetworkConnected(context)) {
+
+            listOfDetailedForecasts.clear()
+            listOfSummariedForecasts.clear()
+            summarisedforecasts.set(null)
+            detailedForecasts.set(null)
+
             loading.set(true)
             online.set(true)
             latitude?.let { lat ->
