@@ -33,10 +33,10 @@ class LocationViewModel @Inject constructor(
 
     fun initiate(navigator: LocationNavigator, latitude: Double?, longitude: Double?) {
         this.navigator = navigator
-        getForecast(latitude, longitude)
+        getForecastFromApi(latitude, longitude)
     }
 
-    private fun getForecast(latitude: Double?, longitude: Double?) {
+    private fun getForecastFromApi(latitude: Double?, longitude: Double?) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
             latitude?.let { lat ->
@@ -51,7 +51,7 @@ class LocationViewModel @Inject constructor(
                                     latObservable.set(it.coord?.lat)
                                     longObservable.set(it.coord?.lon)
 
-                                    getCityInfo(it.coord?.lat, it.coord?.lon)
+                                    getCityInfoFromApi(it.coord?.lat, it.coord?.lon)
                                 }
                                 loading.set(false)
                                 navigator?.onSuccess()
@@ -72,7 +72,7 @@ class LocationViewModel @Inject constructor(
 
     }
 
-    private fun getCityInfo(latitude: Double?, longitude: Double?) {
+    private fun getCityInfoFromApi(latitude: Double?, longitude: Double?) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
             latitude?.let { lat ->
