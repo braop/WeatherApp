@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.CustomApplication
 import com.example.weatherapp.R
 import com.example.weatherapp.adapter.SummarisedForecastRecyclerviewAdapter
-import com.example.weatherapp.adapter.SummaryRecyclerviewAdapter
+import com.example.weatherapp.adapter.DetailedForecastRecyclerviewAdapter
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.db.entity.ForecastEntity
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
     private var longitude: Double? = null
 
     private val forecastRecyclerviewAdapter = SummarisedForecastRecyclerviewAdapter()
-    private val summaryRecyclerviewAdapter = SummaryRecyclerviewAdapter()
+    private val summaryRecyclerviewAdapter = DetailedForecastRecyclerviewAdapter()
 
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
         binding.forecastRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-            this.adapter = forecastRecyclerviewAdapter
+            adapter = forecastRecyclerviewAdapter
         }
 
         binding.summaryRecyclerview.apply {
@@ -120,16 +120,14 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
         autocompleteSupportFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                val latlng = place.latLng
+                val latLng = place.latLng
 
-                viewModel.getForecast(latlng?.latitude, latlng?.longitude, true)
-                viewModel.getWeatherApi(latlng?.latitude, latlng?.longitude, true)
-
+                viewModel.getForecast(latLng?.latitude, latLng?.longitude, true)
+                viewModel.getWeatherApi(latLng?.latitude, latLng?.longitude, true)
 
             }
 
             override fun onError(status: Status) {
-                //Toast.makeText(applicationContext, status.statusMessage, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -165,6 +163,13 @@ class MainActivity : AppCompatActivity(), MainInterface {
                         R.color.color_cloudy
                     )
                 )
+
+                binding.lastUpdated.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_cloudy
+                    )
+                )
             }
             Constants.RAIN -> {
                 binding.headerImage.setImageResource(R.drawable.forest_rainy)
@@ -188,6 +193,13 @@ class MainActivity : AppCompatActivity(), MainInterface {
                     )
                 }
                 binding.toolbarLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_rainy
+                    )
+                )
+
+                binding.lastUpdated.setBackgroundColor(
                     ContextCompat.getColor(
                         this,
                         R.color.color_rainy
@@ -221,6 +233,13 @@ class MainActivity : AppCompatActivity(), MainInterface {
                             R.color.color_sunny
                         )
                     )
+
+                    binding.lastUpdated.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.color_sunny
+                        )
+                    )
                 }
             }
         }
@@ -239,8 +258,6 @@ class MainActivity : AppCompatActivity(), MainInterface {
     }
 
     override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?, isSearch: Boolean) {
-        forecastRecyclerviewAdapter.notifyDataSetChanged()
-        summaryRecyclerviewAdapter.notifyDataSetChanged()
         if (!isSearch) {
             viewModel.deleteWeather(currentWeather)
             latitude = currentWeather?.coord?.lat
@@ -265,6 +282,9 @@ class MainActivity : AppCompatActivity(), MainInterface {
         isSearch: Boolean
     ) {
 
+        forecastRecyclerviewAdapter.apply {
+            this.forecasts = forecasts
+        }
         forecastRecyclerviewAdapter.notifyDataSetChanged()
         summaryRecyclerviewAdapter.notifyDataSetChanged()
 

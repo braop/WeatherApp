@@ -12,8 +12,8 @@ import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SummaryRecyclerviewAdapter :
-    RecyclerView.Adapter<SummaryRecyclerviewAdapter.BindingHolder>() {
+class DetailedForecastRecyclerviewAdapter :
+    RecyclerView.Adapter<DetailedForecastRecyclerviewAdapter.BindingHolder>() {
 
     var detailedForecasts: List<DetailedForecastModel>? = null
 
