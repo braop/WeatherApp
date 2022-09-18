@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
         viewModel.initiate(this)
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        Places.initialize(applicationContext, Constants.PLACES_API)
 
         binding.forecastRecyclerview.apply {
             layoutManager =
@@ -87,6 +88,11 @@ class MainActivity : AppCompatActivity(), MainInterface {
             }
         }
 
+        getPlace()
+
+    }
+
+    private fun getPlace() {
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, Constants.PLACES_API)
         }
@@ -109,11 +115,9 @@ class MainActivity : AppCompatActivity(), MainInterface {
         autocompleteSupportFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 val latlng = place.latLng
-                val latitude = latlng?.latitude
-                val longitude = latlng?.longitude
 
-                viewModel.getForecast(latitude, longitude)
-                viewModel.getWeatherApi(latitude, longitude)
+                viewModel.getForecast(latlng?.latitude, latlng?.longitude, true)
+                viewModel.getWeatherApi(latlng?.latitude, latlng?.longitude, true)
 
             }
 
@@ -121,7 +125,6 @@ class MainActivity : AppCompatActivity(), MainInterface {
                 //Toast.makeText(applicationContext, status.statusMessage, Toast.LENGTH_SHORT).show()
             }
         })
-
     }
 
     override fun onSuccess(status: String?) {
@@ -228,10 +231,12 @@ class MainActivity : AppCompatActivity(), MainInterface {
     override fun onInsertForecastError(it: Throwable) {
     }
 
-    override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?) {
-        viewModel.deleteWeather(currentWeather)
-        latitude = currentWeather?.coord?.lat
-        longitude = currentWeather?.coord?.lon
+    override fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?, isSearch: Boolean) {
+        if (!isSearch) {
+            viewModel.deleteWeather(currentWeather)
+            latitude = currentWeather?.coord?.lat
+            longitude = currentWeather?.coord?.lon
+        }
     }
 
     override fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>) {
@@ -247,10 +252,14 @@ class MainActivity : AppCompatActivity(), MainInterface {
 
     override fun onForecastSuccess(
         forecasts: List<ForecastModel>?,
-        detailedForecasts: List<DetailedForecastModel>?
+        detailedForecasts: List<DetailedForecastModel>?,
+        search: Boolean
     ) {
-        viewModel.deleteAllForecast(forecasts)
-        viewModel.deleteDetailedForecasts(detailedForecasts)
+        if (!search) {
+            viewModel.deleteAllForecast(forecasts)
+            viewModel.deleteDetailedForecasts(detailedForecasts)
+        }
+
     }
 
     override fun onRequestPermissionsResult(
@@ -290,8 +299,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
     private fun getLastKnownLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener(this) { location ->
             if (location != null) {
-                viewModel.getWeatherApi(location.latitude, location.longitude)
-                viewModel.getForecast(location.latitude, location.longitude)
+                viewModel.getWeatherApi(location.latitude, location.longitude, false)
+                viewModel.getForecast(location.latitude, location.longitude, false)
             } else {
                 //Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
                 viewModel.selectWeatherLocalDB()
@@ -344,11 +353,12 @@ interface MainInterface {
     fun onInsertDetailedForecastSuccess()
     fun onInsertDetailedForecastError()
     fun onInsertForecastError(it: Throwable)
-    fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?)
+    fun onGetApiWeatherSuccess(currentWeather: ApiCurrent?, isSearch: Boolean)
     fun onSelectForecastSuccess(forecastEntity: List<ForecastEntity>)
     fun onError(t: Throwable)
     fun onForecastSuccess(
         forecasts: List<ForecastModel>?,
-        detailedForecasts: List<DetailedForecastModel>?
+        detailedForecasts: List<DetailedForecastModel>?,
+        search: Boolean
     )
 }

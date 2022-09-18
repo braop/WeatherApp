@@ -71,7 +71,7 @@ class MainViewModel @Inject constructor(
         this.navigator = navigator
     }
 
-    fun getForecast(latitude: Double?, longitude: Double?) {
+    fun getForecast(latitude: Double?, longitude: Double?, search: Boolean) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
             online.set(true)
@@ -145,7 +145,8 @@ class MainViewModel @Inject constructor(
                                 detailedForecasts.set(listOfDetailedForecasts)
                                 navigator?.onForecastSuccess(
                                     forecasts.get(),
-                                    detailedForecasts.get()
+                                    detailedForecasts.get(),
+                                    search
                                 )
 
 
@@ -334,7 +335,8 @@ class MainViewModel @Inject constructor(
 
     fun getWeatherApi(
         latitude: Double?,
-        longitude: Double?
+        longitude: Double?,
+        isSearch: Boolean
     ) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
@@ -357,7 +359,7 @@ class MainViewModel @Inject constructor(
                                     navigator?.onSuccess(it.weather?.get(0)?.main)
                                 }
                                 loading.set(false)
-                                navigator?.onGetApiWeatherSuccess(currentWeather.get())
+                                navigator?.onGetApiWeatherSuccess(currentWeather.get(), isSearch)
                             }
 
                             override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
@@ -428,7 +430,7 @@ class MainViewModel @Inject constructor(
             }
             Constants.CLEAR -> {
                 currentStatus.set("Sunny")
-                timeInfoUpdate.set(formatted.toString() + ", Mostly Clear Sky")
+                timeInfoUpdate.set(formatted.toString() + ", Clear Sky")
             }
         }
     }
