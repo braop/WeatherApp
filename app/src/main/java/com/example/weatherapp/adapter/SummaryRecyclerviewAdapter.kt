@@ -22,6 +22,7 @@ class SummaryRecyclerviewAdapter :
         return BindingHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: BindingHolder, position: Int) {
         val forecast = detailedForecasts?.get(position)
         holder.binding.forecastDetails = forecast

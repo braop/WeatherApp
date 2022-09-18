@@ -25,8 +25,8 @@
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_layout"
             android:layout_above="@+id/bottom_layout"
+            android:layout_below="@+id/toolbar_layout"
             android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
 
             <androidx.core.widget.NestedScrollView
@@ -342,7 +342,22 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_alignParentTop="true" />
 
-            <RelativeLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40sp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:background="@android:color/white">
+
+                <fragment
+                    android:id="@+id/autocomplete_fragment"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <!--<RelativeLayout
                 android:id="@+id/search_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -350,15 +365,15 @@
                 android:layout_marginStart="@dimen/margin_l"
                 android:paddingEnd="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_l"
-                android:background="@drawable/search_bck_drawable"
+
                 android:gravity="center">
 
                 <EditText
                     android:id="@+id/search_text"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:background="@null"
                     android:layout_marginEnd="@dimen/margin_ll"
+                    android:background="@null"
                     android:fontFamily="@font/bariol_regular"
                     android:hint="@string/search_hint"
                     android:inputType="text"
@@ -366,7 +381,6 @@
                     android:paddingStart="@dimen/margin_l"
                     android:textSize="@dimen/text_l"
                     tools:ignore="RtlSymmetry"
-
                     />
 
                 <RelativeLayout
@@ -385,7 +399,7 @@
 
                 </RelativeLayout>
 
-            </RelativeLayout>
+            </RelativeLayout>-->
 
         </RelativeLayout>
 

@@ -22,8 +22,13 @@ import com.example.weatherapp.models.DetailedForecastModel
 import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.util.Constants
 import com.example.weatherapp.viewModel.MainViewModel
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import javax.inject.Inject
 
 
@@ -35,7 +40,6 @@ class MainActivity : AppCompatActivity(), MainInterface {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var latitude: Double? = null
     private var longitude: Double? = null
-
 
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -83,13 +87,40 @@ class MainActivity : AppCompatActivity(), MainInterface {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ContextCompat.getColor(
-                this,
-                R.color.color_rainy
-            )
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, Constants.PLACES_API)
         }
 
+        val autocompleteSupportFragment =
+            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment?
+
+        autocompleteSupportFragment!!.setPlaceFields(
+            listOf(
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.PHONE_NUMBER,
+                Place.Field.LAT_LNG,
+                Place.Field.OPENING_HOURS,
+                Place.Field.RATING,
+                Place.Field.USER_RATINGS_TOTAL
+            )
+        )
+
+        autocompleteSupportFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                val latlng = place.latLng
+                val latitude = latlng?.latitude
+                val longitude = latlng?.longitude
+
+                viewModel.getForecast(latitude, longitude)
+                viewModel.getWeatherApi(latitude, longitude)
+
+            }
+
+            override fun onError(status: Status) {
+                //Toast.makeText(applicationContext, status.statusMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 
