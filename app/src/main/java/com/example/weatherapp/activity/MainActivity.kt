@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
     private var latitude: Double? = null
     private var longitude: Double? = null
 
-    private val forecastRecyclerviewAdapter = SummarisedForecastRecyclerviewAdapter()
-    private val summaryRecyclerviewAdapter = DetailedForecastRecyclerviewAdapter()
+    private val summarisedForecastsRecyclerviewAdapter = SummarisedForecastRecyclerviewAdapter()
+    private val detailedForecastsRecyclerviewAdapter = DetailedForecastRecyclerviewAdapter()
 
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -88,13 +88,13 @@ class MainActivity : AppCompatActivity(), MainInterface {
         binding.forecastRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-            adapter = forecastRecyclerviewAdapter
+            adapter = summarisedForecastsRecyclerviewAdapter
         }
 
         binding.summaryRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = summaryRecyclerviewAdapter
+            adapter = detailedForecastsRecyclerviewAdapter
         }
     }
 
@@ -281,8 +281,8 @@ class MainActivity : AppCompatActivity(), MainInterface {
         detailedForecasts: List<DetailedForecastModel>?,
         isSearch: Boolean
     ) {
-        forecastRecyclerviewAdapter.notifyDataSetChanged()
-        summaryRecyclerviewAdapter.notifyDataSetChanged()
+        summarisedForecastsRecyclerviewAdapter.notifyDataSetChanged()
+        detailedForecastsRecyclerviewAdapter.notifyDataSetChanged()
 
         if (!isSearch) {
             viewModel.deleteAllForecastFromDB(forecasts)
