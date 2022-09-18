@@ -2,7 +2,6 @@ package com.example.weatherapp.viewModel
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
@@ -55,8 +54,8 @@ class MainViewModel @Inject constructor(
     val detailedForecasts = ObservableField<List<DetailedForecastModel>>()
     val listOfDetailedForecasts = arrayListOf<DetailedForecastModel>()
 
-    val forecasts = ObservableField<List<ForecastModel>>()
-    val listOfForecasts = arrayListOf<ForecastModel>()
+    val summarisedforecasts = ObservableField<List<ForecastModel>>()
+    val listOfSummariedForecasts = arrayListOf<ForecastModel>()
 
     val loading = ObservableBoolean(false)
     val online = ObservableField(false)
@@ -77,9 +76,11 @@ class MainViewModel @Inject constructor(
         this.navigator = navigator
     }
 
-    fun getForecast(latitude: Double?, longitude: Double?, isSearch: Boolean) {
-
-        Log.d("TAGSO", "onResponse: $latitude $longitude")
+    fun getDetailedForecastFromApi(latitude: Double?, longitude: Double?, isSearch: Boolean) {
+        listOfDetailedForecasts.clear()
+        listOfSummariedForecasts.clear()
+        summarisedforecasts.set(null)
+        detailedForecasts.set(null)
 
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
@@ -111,8 +112,8 @@ class MainViewModel @Inject constructor(
                                         )
 
                                         //summarized forecast
-                                        if (listOfForecasts.isEmpty()) {
-                                            listOfForecasts.add(
+                                        if (listOfSummariedForecasts.isEmpty()) {
+                                            listOfSummariedForecasts.add(
                                                 ForecastModel(
                                                     apiList.dtTxt?.trim()?.substring(0, 10),
                                                     getDayName(
@@ -125,7 +126,7 @@ class MainViewModel @Inject constructor(
 
                                         } else {
                                             var count = 0
-                                            listOfForecasts.forEach { forecastModel ->
+                                            listOfSummariedForecasts.forEach { forecastModel ->
                                                 if (forecastModel.dateText.equals(
                                                         apiList.dtTxt?.trim()?.substring(0, 10)
                                                     )
@@ -134,7 +135,7 @@ class MainViewModel @Inject constructor(
                                                 }
                                             }
                                             if (count == 0) {
-                                                listOfForecasts.add(
+                                                listOfSummariedForecasts.add(
                                                     ForecastModel(
                                                         apiList.dtTxt?.trim()?.substring(0, 10),
                                                         getDayName(
@@ -150,11 +151,11 @@ class MainViewModel @Inject constructor(
                                     }
                                 }
 
-                                forecasts.set(listOfForecasts)
+                                summarisedforecasts.set(listOfSummariedForecasts)
                                 detailedForecasts.set(listOfDetailedForecasts)
 
                                 navigator?.onForecastSuccess(
-                                    forecasts.get(),
+                                    summarisedforecasts.get(),
                                     detailedForecasts.get(),
                                     isSearch
                                 )
@@ -219,7 +220,7 @@ class MainViewModel @Inject constructor(
         forecastRepository.selectForeCast().subscribe(
             {
                 it.forEach { forecastEntity ->
-                    listOfForecasts.add(
+                    listOfSummariedForecasts.add(
                         ForecastModel(
                             forecastEntity.dateText,
                             forecastEntity.dayName,
@@ -228,7 +229,7 @@ class MainViewModel @Inject constructor(
                         )
                     )
                 }
-                forecasts.set(listOfForecasts)
+                summarisedforecasts.set(listOfSummariedForecasts)
 
                 loading.set(false)
                 navigator?.onSelectForecastSuccess(it)
@@ -397,7 +398,10 @@ class MainViewModel @Inject constructor(
                 maxTemp.set(it.maxTemp)
                 city.set(it.name)
                 generateStatus(it.main)
-                lastUpdatedAt.set("Last updated at: " + createdAt.parse(it.createdAt).toString().trim().substring(0,19))
+                lastUpdatedAt.set(
+                    "Last updated at: " + createdAt.parse(it.createdAt).toString().trim()
+                        .substring(0, 19)
+                )
                 loading.set(false)
                 navigator?.onSuccess(it.main)
             },
@@ -418,7 +422,7 @@ class MainViewModel @Inject constructor(
         feelsLike.set(null)
         minTemp.set(null)
         maxTemp.set(null)
-        forecasts.set(null)
+        summarisedforecasts.set(null)
         online.set(false)
         city.set(null)
         noPermission.set(false)

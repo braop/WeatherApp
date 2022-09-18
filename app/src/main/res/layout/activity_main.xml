@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_layout"
             android:layout_below="@+id/toolbar_layout"
-            android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
+            android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.summarisedforecasts == null ? View.GONE : View.VISIBLE }">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -221,7 +221,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
-                        app:forecast="@{viewModel.forecasts}" />
+                        app:forecast="@{viewModel.summarisedforecasts}" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
@@ -259,7 +259,7 @@
             android:elevation="1dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
+            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.summarisedforecasts == null ? View.GONE : View.VISIBLE }">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -350,7 +350,7 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
+            android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.summarisedforecasts == null ? View.GONE : View.VISIBLE }">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/my_toolbar"

@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
             override fun onPlaceSelected(place: Place) {
                 val latLng = place.latLng
 
-                viewModel.getForecast(latLng?.latitude, latLng?.longitude, true)
+                viewModel.getDetailedForecastFromApi(latLng?.latitude, latLng?.longitude, true)
                 viewModel.getWeatherApi(latLng?.latitude, latLng?.longitude, true)
 
             }
@@ -281,10 +281,6 @@ class MainActivity : AppCompatActivity(), MainInterface {
         detailedForecasts: List<DetailedForecastModel>?,
         isSearch: Boolean
     ) {
-
-        forecastRecyclerviewAdapter.apply {
-            this.forecasts = forecasts
-        }
         forecastRecyclerviewAdapter.notifyDataSetChanged()
         summaryRecyclerviewAdapter.notifyDataSetChanged()
 
@@ -333,7 +329,7 @@ class MainActivity : AppCompatActivity(), MainInterface {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener(this) { location ->
             if (location != null) {
                 viewModel.getWeatherApi(location.latitude, location.longitude, false)
-                viewModel.getForecast(location.latitude, location.longitude, false)
+                viewModel.getDetailedForecastFromApi(location.latitude, location.longitude, false)
             } else {
                 //Toast.makeText(this, "No known location", Toast.LENGTH_SHORT).show()
                 viewModel.selectWeatherLocalDB()
