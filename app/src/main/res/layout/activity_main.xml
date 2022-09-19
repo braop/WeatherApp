@@ -89,35 +89,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/hour_forecast"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_l"
-                            android:layout_marginTop="@dimen/margin_sm"
-                            android:layout_marginEnd="@dimen/margin_l"
-                            android:layout_marginBottom="@dimen/margin_m"
-                            android:fontFamily="@font/bariol_bold"
-                            android:text="@string/forecast_prediction"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_m" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/summary_recyclerview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/margin_s"
-                            android:overScrollMode="never"
-                            app:detailed_forecast="@{viewModel.detailedForecasts}" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_l"
                         android:layout_marginVertical="@dimen/margin_s"
                         android:baselineAligned="false"
@@ -213,7 +184,42 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height=".5dp"
+                        android:background="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/margin_sm"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/hour_forecast"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_l"
+                            android:layout_marginTop="@dimen/margin_sm"
+                            android:layout_marginEnd="@dimen/margin_l"
+                            android:layout_marginBottom="@dimen/margin_m"
+                            android:fontFamily="@font/bariol_bold"
+                            android:text="@string/forecast_prediction"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_m" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/summary_recyclerview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin_s"
+                            android:overScrollMode="never"
+                            app:detailed_forecast="@{viewModel.detailedForecasts}" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height=".5dp"
                         android:background="@color/white" />
 
                     <androidx.recyclerview.widget.RecyclerView
