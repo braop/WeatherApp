@@ -15,7 +15,7 @@ data class ApiList(
     var sys: ApiSys?,
     @SerializedName("dt_txt")
     var dtTxt: String?
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readParcelable(ApiMain::class.java.classLoader),
@@ -26,8 +26,7 @@ data class ApiList(
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readParcelable(ApiSys::class.java.classLoader),
         parcel.readString()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(dt)

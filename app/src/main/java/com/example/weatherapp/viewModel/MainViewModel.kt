@@ -19,6 +19,7 @@ import com.example.weatherapp.models.ForecastModel
 import com.example.weatherapp.repository.DetailedForecastRepository
 import com.example.weatherapp.repository.ForecastRepository
 import com.example.weatherapp.repository.WeatherRepository
+import com.example.weatherapp.util.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,11 +54,12 @@ class MainViewModel @Inject constructor(
     val detailedForecasts = ObservableField<List<DetailedForecastModel>>()
     val listOfDetailedForecasts = arrayListOf<DetailedForecastModel>()
 
-    val forecasts = ObservableField<List<ForecastModel>>()
-    val listOfForecasts = arrayListOf<ForecastModel>()
+    val summarisedforecasts = ObservableField<List<ForecastModel>>()
+    val listOfSummariedForecasts = arrayListOf<ForecastModel>()
 
     val loading = ObservableBoolean(false)
     val online = ObservableField(false)
+    val noPermission = ObservableField(false)
 
     var navigator: MainInterface? = null
     var timeInfoUpdate = ObservableField<String>()
@@ -65,12 +67,24 @@ class MainViewModel @Inject constructor(
     private val current: LocalDateTime? = LocalDateTime.now()
     private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 
+    @SuppressLint("SimpleDateFormat")
+    private val createdAt = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
+    val lastUpdatedAt = ObservableField<String>()
+
     fun initiate(navigator: MainInterface) {
         this.navigator = navigator
     }
 
-    fun getForecast(latitude: Double?, longitude: Double?) {
+    fun getDetailedForecastFromApi(latitude: Double?, longitude: Double?, isSearch: Boolean) {
+
         if ((context as CustomApplication).isNetworkConnected(context)) {
+
+            listOfDetailedForecasts.clear()
+            listOfSummariedForecasts.clear()
+            summarisedforecasts.set(null)
+            detailedForecasts.set(null)
+
             loading.set(true)
             online.set(true)
             latitude?.let { lat ->
@@ -100,8 +114,8 @@ class MainViewModel @Inject constructor(
                                         )
 
                                         //summarized forecast
-                                        if (listOfForecasts.isEmpty()) {
-                                            listOfForecasts.add(
+                                        if (listOfSummariedForecasts.isEmpty()) {
+                                            listOfSummariedForecasts.add(
                                                 ForecastModel(
                                                     apiList.dtTxt?.trim()?.substring(0, 10),
                                                     getDayName(
@@ -113,9 +127,9 @@ class MainViewModel @Inject constructor(
                                             )
 
                                         } else {
-                                            var count = 0;
-                                            listOfForecasts.forEach {
-                                                if (it.dateText.equals(
+                                            var count = 0
+                                            listOfSummariedForecasts.forEach { forecastModel ->
+                                                if (forecastModel.dateText.equals(
                                                         apiList.dtTxt?.trim()?.substring(0, 10)
                                                     )
                                                 ) {
@@ -123,7 +137,7 @@ class MainViewModel @Inject constructor(
                                                 }
                                             }
                                             if (count == 0) {
-                                                listOfForecasts.add(
+                                                listOfSummariedForecasts.add(
                                                     ForecastModel(
                                                         apiList.dtTxt?.trim()?.substring(0, 10),
                                                         getDayName(
@@ -139,14 +153,14 @@ class MainViewModel @Inject constructor(
                                     }
                                 }
 
-                                forecasts.set(listOfForecasts)
+                                summarisedforecasts.set(listOfSummariedForecasts)
                                 detailedForecasts.set(listOfDetailedForecasts)
+
                                 navigator?.onForecastSuccess(
-                                    forecasts.get(),
-                                    detailedForecasts.get()
+                                    summarisedforecasts.get(),
+                                    detailedForecasts.get(),
+                                    isSearch
                                 )
-
-
                                 loading.set(false)
                             }
 
@@ -175,7 +189,7 @@ class MainViewModel @Inject constructor(
         return DateFormatSymbols().weekdays[cal[Calendar.DAY_OF_WEEK]]
     }
 
-    private fun insertForecast(forecasts: ForecastEntity) {
+    private fun insertForecastToDB(forecasts: ForecastEntity) {
         forecastRepository.insertForecast(
             forecasts
         ).subscribe(
@@ -189,7 +203,7 @@ class MainViewModel @Inject constructor(
 
     }
 
-    private fun insertDetailedForecast(detailedForecast: DetailedForecastEntity) {
+    private fun insertDetailedForecastToDB(detailedForecast: DetailedForecastEntity) {
         detailedForecastRepository.insertDetailedForecast(
             detailedForecast
         ).subscribe(
@@ -203,21 +217,21 @@ class MainViewModel @Inject constructor(
 
     }
 
-    private fun selectForecastLocalDB() {
+    fun selectForecastLocalDB() {
         loading.set(true)
         forecastRepository.selectForeCast().subscribe(
             {
-                it.forEach {
-                    listOfForecasts.add(
+                it.forEach { forecastEntity ->
+                    listOfSummariedForecasts.add(
                         ForecastModel(
-                            it.dateText,
-                            it.dayName,
-                            it.temp,
-                            it.status
+                            forecastEntity.dateText,
+                            forecastEntity.dayName,
+                            forecastEntity.temp,
+                            forecastEntity.status
                         )
                     )
                 }
-                forecasts.set(listOfForecasts)
+                summarisedforecasts.set(listOfSummariedForecasts)
 
                 loading.set(false)
                 navigator?.onSelectForecastSuccess(it)
@@ -230,17 +244,17 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun selectDetailedForecastsLocalDB() {
+    fun selectDetailedForecastsLocalDB() {
         loading.set(true)
         detailedForecastRepository.selectDetailedForeCast().subscribe(
             {
-                it.forEach {
+                it.forEach { detailedForecastEntity ->
                     listOfDetailedForecasts.add(
                         DetailedForecastModel(
-                            it.id,
-                            it.status,
-                            it.dateText,
-                            it.temp
+                            detailedForecastEntity.id,
+                            detailedForecastEntity.status,
+                            detailedForecastEntity.dateText,
+                            detailedForecastEntity.temp
                         )
                     )
                 }
@@ -255,11 +269,11 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun deleteAllForecast(forecasts: List<ForecastModel>?) {
+    fun deleteAllForecastFromDB(forecasts: List<ForecastModel>?) {
         forecastRepository.deleteAllForeCast().subscribe(
             {
                 forecasts?.forEach {
-                    insertForecast(
+                    insertForecastToDB(
                         ForecastEntity(
                             null,
                             it.dateText,
@@ -277,11 +291,11 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun deleteDetailedForecasts(detailedForecasts: List<DetailedForecastModel>?) {
+    fun deleteDetailedForecastsFromDB(detailedForecasts: List<DetailedForecastModel>?) {
         detailedForecastRepository.deleteAllDetailedForeCast().subscribe(
             {
                 detailedForecasts?.forEach {
-                    insertDetailedForecast(
+                    insertDetailedForecastToDB(
                         DetailedForecastEntity(
                             null,
                             it.weatherStatus,
@@ -298,10 +312,10 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun deleteWeather(currentWeather: ApiCurrent?) {
+    fun deleteWeatherFromDB(currentWeather: ApiCurrent?) {
         weatherRepository.deleteAllWeather().subscribe(
             {
-                insertWeather(currentWeather)
+                insertWeatherToDB(currentWeather)
             },
             {
 
@@ -309,7 +323,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun insertWeather(currentWeather: ApiCurrent?) {
+    private fun insertWeatherToDB(currentWeather: ApiCurrent?) {
         weatherRepository.insertWeather(
             WeatherEntity(
                 null,
@@ -319,7 +333,8 @@ class MainViewModel @Inject constructor(
                 currentWeather?.main?.tempMin?.toInt(),
                 currentWeather?.main?.temp?.toInt(),
                 currentWeather?.main?.feelsLike?.toInt(),
-                currentWeather?.name
+                currentWeather?.name,
+                createdAt.format(Date())
             )
         ).subscribe(
             {
@@ -332,7 +347,8 @@ class MainViewModel @Inject constructor(
 
     fun getWeatherApi(
         latitude: Double?,
-        longitude: Double?
+        longitude: Double?,
+        isSearch: Boolean
     ) {
         if ((context as CustomApplication).isNetworkConnected(context)) {
             loading.set(true)
@@ -350,11 +366,16 @@ class MainViewModel @Inject constructor(
                                     maxTemp.set(it.main?.tempMax?.toInt())
                                     currentTemp.set(it.main?.temp?.toInt())
                                     feelsLike.set(it.main?.feelsLike?.toInt().toString())
-                                    generateStatus(it.weather?.get(0)?.main)
+                                    generateStatus(
+                                        it.weather?.get(0)?.main,
+                                        it.weather?.get(0)?.description
+                                    )
+
+
                                     navigator?.onSuccess(it.weather?.get(0)?.main)
                                 }
                                 loading.set(false)
-                                navigator?.onGetApiWeatherSuccess(currentWeather.get())
+                                navigator?.onGetApiWeatherSuccess(currentWeather.get(), isSearch)
                             }
 
                             override fun onFailure(call: Call<ApiCurrent>, t: Throwable) {
@@ -368,11 +389,12 @@ class MainViewModel @Inject constructor(
 
         } else {
             // no internet connection
-            selectWeatherLocalDB()
+            online.set(false)
+            selectWeatherFromDB()
         }
     }
 
-    private fun selectWeatherLocalDB() {
+    fun selectWeatherFromDB() {
         loading.set(true)
         weatherRepository.selectWeather().subscribe(
             {
@@ -381,7 +403,11 @@ class MainViewModel @Inject constructor(
                 minTemp.set(it.minTemp)
                 maxTemp.set(it.maxTemp)
                 city.set(it.name)
-                generateStatus(it.main)
+                generateStatus(it.main, it.description)
+                lastUpdatedAt.set(
+                    "Last updated at: " + createdAt.parse(it.createdAt).toString().trim()
+                        .substring(0, 19)
+                )
                 loading.set(false)
                 navigator?.onSuccess(it.main)
             },
@@ -391,6 +417,10 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun setPermissionStatus(boolean: Boolean) {
+        noPermission.set(boolean)
+    }
+
     fun destroy() {
         currentWeather.set(null)
         currentTemp.set(null)
@@ -398,26 +428,29 @@ class MainViewModel @Inject constructor(
         feelsLike.set(null)
         minTemp.set(null)
         maxTemp.set(null)
-        forecasts.set(null)
+        summarisedforecasts.set(null)
+        online.set(false)
+        city.set(null)
+        noPermission.set(false)
         navigator = null
     }
 
-    private fun generateStatus(status: String?) {
+    private fun generateStatus(status: String?, description: String?) {
 
         val formatted = current?.format(formatter)
 
         when (status) {
-            "Clouds" -> {
-                currentStatus.set("Cloudy")
-                timeInfoUpdate.set(formatted.toString() + ", Mostly Cloudy")
+            Constants.CLOUDS -> {
+                currentStatus.set(Constants.CLOUDY)
+                timeInfoUpdate.set(formatted.toString() + ", " + description)
             }
-            "Rain" -> {
-                currentStatus.set("Rainy")
-                timeInfoUpdate.set(formatted.toString() + ", Mostly Rainy")
+            Constants.RAIN -> {
+                currentStatus.set(Constants.RAINY)
+                timeInfoUpdate.set(formatted.toString() + ", " + description)
             }
-            "Clear" -> {
-                currentStatus.set("Sunny")
-                timeInfoUpdate.set(formatted.toString() + ", Mostly Clear Sky")
+            Constants.CLEAR -> {
+                currentStatus.set(Constants.SUNNY)
+                timeInfoUpdate.set(formatted.toString() + ", " + description)
             }
         }
     }

@@ -21,7 +21,7 @@ class AppModule(private val application: Application) {
     @Singleton
     @Provides
     fun provideApiService(): ApiService.IApiService {
-        return ApiService(application).service
+        return ApiService().service
     }
 
     @Singleton

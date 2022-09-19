@@ -9,12 +9,10 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="color_rainy">#57575D</color>
-    <color name="color_bottom_rainy">#3e3e45</color>
 
     <color name="color_cloudy">#54717A</color>
-    <color name="color_bottom_cloudy">#2b4249</color>
 
     <color name="color_sunny">#47AB2F</color>
-    <color name="color_bottom_sunny">#435f67</color>
+    <color name="color_offline">#ff0000</color>
 
 </resources>

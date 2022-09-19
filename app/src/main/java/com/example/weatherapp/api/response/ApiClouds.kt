@@ -5,9 +5,8 @@ import android.os.Parcelable
 
 data class ApiClouds(
     var all: Int?
-): Parcelable {
-    constructor(parcel: Parcel) : this(parcel.readValue(Int::class.java.classLoader) as? Int) {
-    }
+) : Parcelable {
+    constructor(parcel: Parcel) : this(parcel.readValue(Int::class.java.classLoader) as? Int)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(all)

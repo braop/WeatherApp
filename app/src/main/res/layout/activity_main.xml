@@ -20,12 +20,14 @@
         android:layout_height="match_parent"
         android:overScrollMode="never">
 
+
         <RelativeLayout
             android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_layout"
-            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
+            android:layout_below="@+id/toolbar_layout"
+            android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.summarisedforecasts == null ? View.GONE : View.VISIBLE }">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -219,12 +221,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
-                        app:forecast="@{viewModel.forecasts}" />
+                        app:forecast="@{viewModel.summarisedforecasts}" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/last_updated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar_layout"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/bariol_regular"
+            android:paddingStart="@dimen/margin_sm"
+            android:paddingEnd="@dimen/margin_l"
+            android:paddingBottom="@dimen/margin_sm"
+            android:text="@{viewModel.lastUpdatedAt}"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_m"
+            android:visibility="@{viewModel.online == true &amp;&amp; viewModel.lastUpdatedAt == null ? View.GONE : View.VISIBLE}" />
 
         <ProgressBar
             android:layout_width="50dp"
@@ -238,10 +255,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
+            android:baselineAligned="false"
             android:elevation="1dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.forecasts == null ? View.GONE : View.VISIBLE }">
+            android:visibility="@{viewModel.loading == true &amp;&amp; viewModel.summarisedforecasts == null ? View.GONE : View.VISIBLE }">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -269,29 +287,93 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_ss" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.online == true ? View.GONE : View.VISIBLE}">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/margin_s"
+                        android:src="@drawable/internet_off_circle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/bariol_regular"
+                        android:text="@string/you_re_offline"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_s" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin_l"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:padding="@dimen/margin_l">
 
                 <TextView
+                    android:id="@+id/location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/bariol_regular"
-                    android:text="@string/you_re_offline"
-                    android:textColor="@color/white"
+                    android:padding="@dimen/margin_m"
+                    android:text="@string/see_your_location"
                     android:textAlignment="textEnd"
-                    android:textSize="@dimen/text_s"
-                    android:visibility="@{viewModel.online == true ? View.GONE : View.VISIBLE}" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_s" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin_ll"
+            android:fontFamily="@font/bariol_regular"
+            android:text="@string/no_permission_description"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_l"
+            android:visibility="@{viewModel.noPermission == true ? View.VISIBLE : View.GONE }" />
+
+        <RelativeLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:visibility="@{viewModel.currentWeather == null &amp;&amp; viewModel.summarisedforecasts == null ? View.GONE : View.VISIBLE }">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentTop="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40sp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:background="@android:color/white">
+
+                <fragment
+                    android:id="@+id/autocomplete_fragment"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ItemSummaryBinding
 import com.example.weatherapp.models.DetailedForecastModel
+import com.example.weatherapp.util.Constants
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SummaryRecyclerviewAdapter :
-    RecyclerView.Adapter<SummaryRecyclerviewAdapter.BindingHolder>() {
+class DetailedForecastRecyclerviewAdapter :
+    RecyclerView.Adapter<DetailedForecastRecyclerviewAdapter.BindingHolder>() {
 
     var detailedForecasts: List<DetailedForecastModel>? = null
 
@@ -21,6 +22,7 @@ class SummaryRecyclerviewAdapter :
         val binding = ItemSummaryBinding.inflate(layoutInflater, parent, false)
         return BindingHolder(binding)
     }
+
 
     override fun onBindViewHolder(holder: BindingHolder, position: Int) {
         val forecast = detailedForecasts?.get(position)
@@ -31,13 +33,13 @@ class SummaryRecyclerviewAdapter :
         //2202-02-20 00:00:00
 
         when (forecast?.weatherStatus) {
-            "Clouds" -> {
+            Constants.CLOUDS -> {
                 holder.binding.icon.setImageResource(R.drawable.cloud)
             }
-            "Rain" -> {
+            Constants.RAIN -> {
                 holder.binding.icon.setImageResource(R.drawable.rain)
             }
-            "Clear" -> {
+            Constants.CLEAR -> {
                 holder.binding.icon.setImageResource(R.drawable.sun)
             }
         }
