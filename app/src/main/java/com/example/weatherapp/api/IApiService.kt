@@ -1,18 +1,15 @@
 package com.example.weatherapp.api
 
-import com.example.weatherapp.CustomInterceptor
 import com.example.weatherapp.api.response.ApiCurrent
 import com.example.weatherapp.api.response.ApiForecast
 import com.example.weatherapp.util.Constants
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.util.concurrent.TimeUnit
 
 class ApiService {
 
@@ -30,19 +27,10 @@ class ApiService {
         retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl(Constants.BASE_URL)
-            .client(httpBuilder.build())
             .build()
 
         return retrofit.create(serviceClass)
     }
-
-    private val httpBuilder: OkHttpClient.Builder
-        get() {
-            //create http client
-            return OkHttpClient.Builder()
-                .addInterceptor(CustomInterceptor())
-                .readTimeout(30, TimeUnit.SECONDS)
-        }
 
     interface IApiService {
         @GET("forecast")
