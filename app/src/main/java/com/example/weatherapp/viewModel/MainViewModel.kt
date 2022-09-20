@@ -323,7 +323,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun insertWeatherToDB(currentWeather: ApiCurrent?) {
+    private fun insertWeatherToDB(currentWeather: ApiCurrent?) {
         weatherRepository.insertWeather(
             WeatherEntity(
                 null,
